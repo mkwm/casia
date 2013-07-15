@@ -12,15 +12,17 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf.urls import patterns, include, url
+from django.http import HttpResponse
 
-from django.contrib import admin
-admin.autodiscover()
+from casia.server.exceptions import ValidationError
+from casia.server.utils import validate_ticket
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-)
 
-from casia.server.urls import urlpatterns as server_urlpatterns
-
-urlpatterns += server_urlpatterns
+# CAS 1.0 validation
+def validate(request):
+    st = None
+    try:
+        st = validate_ticket(request)
+    except ValidationError:
+        pass
+    return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')

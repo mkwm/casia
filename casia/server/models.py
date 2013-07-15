@@ -17,7 +17,7 @@ from django.contrib.sessions.models import Session
 from django.db import models
 from django.utils.timezone import now
 
-from casia.server.managers import ConsumableManager
+from casia.server.managers import ConsumableManager, ServiceTicketManager
 from casia.server.utils import generate_ticket
 
 
@@ -58,7 +58,11 @@ class AbstractConsumable(models.Model):
 
 
 class ServiceTicket(AbstractTicket, AbstractConsumable):
+    objects = models.Manager()
+    consumable = ServiceTicketManager()
+    
     prefix = 'ST'
+    
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     session = models.ForeignKey(Session)
     # IE is not able to handle GET requests to URLs longer than 2083 bytes
@@ -66,3 +70,4 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     # nginx supports 8192 bytes in URLs by default
     # For that reasons, its safer to use TextField insted of CharField
     url = models.TextField()
+    renewed = models.BooleanField()

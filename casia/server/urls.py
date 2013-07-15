@@ -12,15 +12,8 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf.urls import patterns, include, url
-
-from django.contrib import admin
-admin.autodiscover()
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^validate$', 'casia.server.views.validate', name='validate'),
 )
-
-from casia.server.urls import urlpatterns as server_urlpatterns
-
-urlpatterns += server_urlpatterns

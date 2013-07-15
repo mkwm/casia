@@ -14,6 +14,21 @@
 
 from django.utils.crypto import get_random_string
 
+from casia.server.exceptions import InvalidRequest
+
 
 def generate_ticket(prefix, length):
     return prefix + '-' + get_random_string(length)
+
+
+def validate_ticket(request):
+    from casia.server.models import ServiceTicket
+
+    service = request.GET.get('service')
+    ticket = request.GET.get('ticket')
+    renew = 'renew' in request.GET
+
+    if not service or not ticket:
+        raise InvalidRequest("'service' and 'ticket' parameters are both required.")
+
+    return ServiceTicket.consumable.validate(service, ticket, renew)

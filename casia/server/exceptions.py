@@ -12,15 +12,24 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf.urls import patterns, include, url
+class ValidationError(Exception):
+    def __str__(self):
+        return self.msg
 
-from django.contrib import admin
-admin.autodiscover()
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-)
+class InvalidRequest(ValidationError):
+    def __init__(self, msg):
+        self.code = 'INVALID_REQUEST'
+        self.msg = msg
 
-from casia.server.urls import urlpatterns as server_urlpatterns
 
-urlpatterns += server_urlpatterns
+class InvalidTicket(ValidationError):
+    def __init__(self, msg):
+        self.code = 'INVALID_TICKET'
+        self.msg = msg
+
+
+class InvalidService(ValidationError):
+    def __init__(self, msg):
+        self.code = 'INVALID_SERVICE'
+        self.msg = msg
