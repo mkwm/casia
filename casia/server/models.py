@@ -61,3 +61,8 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     prefix = 'ST'
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     session = models.ForeignKey(Session)
+    # IE is not able to handle GET requests to URLs longer than 2083 bytes
+    # Apache is known to have troubles with URLs longer than 4000 bytes
+    # nginx supports 8192 bytes in URLs by default
+    # For that reasons, its safer to use TextField insted of CharField
+    url = models.TextField()
