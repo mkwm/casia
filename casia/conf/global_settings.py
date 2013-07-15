@@ -12,6 +12,9 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from datetime import timedelta
+
+
 # Default Casia settings. Override these with settings in the module
 # pointed-to by the DJANGO_SETTINGS_MODULE environment variable.
 
@@ -40,3 +43,5 @@ INSTALLED_APPS = (
     'south',
     'casia.server',
 )
+
+CONSUMABLE_LIFETIME = timedelta(minutes=5)

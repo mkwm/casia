@@ -13,8 +13,9 @@
 
 
 from django.conf import settings
-from django.db import models
 from django.contrib.sessions.models import Session
+from django.db import models
+from django.utils.timezone import now
 
 from casia.server.utils import generate_ticket
 
@@ -39,7 +40,20 @@ class AbstractTicket(models.Model):
         abstract = True
 
 
-class ServiceTicket(AbstractTicket):
+class AbstractConsumable(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    consumed_at = models.DateTimeField(blank=True, null=True)
+
+    def is_consumable(self):
+        return (self.consumed_at is None and
+                self.created_at >= now() - settings.CONSUMABLE_LIFETIME)
+    is_consumable.boolean = True
+
+    class Meta:
+        abstract = True
+
+
+class ServiceTicket(AbstractTicket, AbstractConsumable):
     prefix = 'ST'
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     session = models.ForeignKey(Session)

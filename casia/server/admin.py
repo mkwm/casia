@@ -17,4 +17,8 @@ from django.contrib import admin
 from casia.server.models import ServiceTicket
 
 
-admin.site.register(ServiceTicket)
+class ServiceTicketAdmin(admin.ModelAdmin):
+    list_display = ('ticket', 'created_at', 'is_consumable')
+
+
+admin.site.register(ServiceTicket, ServiceTicketAdmin)
