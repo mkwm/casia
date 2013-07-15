@@ -17,6 +17,7 @@ from django.contrib.sessions.models import Session
 from django.db import models
 from django.utils.timezone import now
 
+from casia.server.managers import ConsumableManager
 from casia.server.utils import generate_ticket
 
 
@@ -41,6 +42,9 @@ class AbstractTicket(models.Model):
 
 
 class AbstractConsumable(models.Model):
+    objects = models.Manager()
+    consumable = ConsumableManager()
+
     created_at = models.DateTimeField(auto_now_add=True)
     consumed_at = models.DateTimeField(blank=True, null=True)
 
