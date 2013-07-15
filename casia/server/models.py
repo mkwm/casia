@@ -14,8 +14,13 @@
 
 from django.conf import settings
 from django.db import models
+from django.contrib.sessions.models import Session
 
 from casia.server.utils import generate_ticket
+
+
+# Monkey patch which makes it possible to distinguish sessions in admin panel
+Session.__unicode__ = lambda self: self.session_key
 
 
 class AbstractTicket(models.Model):
@@ -36,3 +41,5 @@ class AbstractTicket(models.Model):
 
 class ServiceTicket(AbstractTicket):
     prefix = 'ST'
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    session = models.ForeignKey(Session)
