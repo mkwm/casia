@@ -6,6 +6,8 @@ CAS server based on Django
 Installation
 ------------
 
+Python 3 is currently not supported. You have to use Python 2.
+
 At the moment installation is a bit complicated. Look only if you dare...
 
 Clone this repository:
@@ -21,6 +23,12 @@ Then you need to copy contents of ``casia/conf/instance_template`` and adjust
 their contents to your needs (substitute instance_name with instance name).
 
 Remember that ``casia`` folder has to be in your ``PYTHONPATH``!
+
+Now, create Django database tables:
+``python manage.py syncdb``
+
+And then apply Casia South migrations:
+``python manage.py migrate``
 
 Authors
 -------
