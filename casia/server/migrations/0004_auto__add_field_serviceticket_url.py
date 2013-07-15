@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'ServiceTicket.url'
         db.add_column(u'server_serviceticket', 'url',
-                      self.gf('django.db.models.fields.TextField')(default=''),
+                      self.gf('django.db.models.fields.TextField')(default='http://localhost/'),
                       keep_default=False)
 
 
