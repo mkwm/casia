@@ -42,6 +42,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'south',
     'casia.server',
+    'casia.assets.bootstrap',
+    'casia.assets.font_awesome',
+    'casia.assets.html5shiv',
+    'casia.assets.jquery',
+    'casia.webapp',
 )
 
 CONSUMABLE_LIFETIME = timedelta(minutes=5)
