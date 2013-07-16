@@ -12,17 +12,22 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
-from django.contrib import admin
-admin.autodiscover()
+from casia.webapp.views import LoginView, LogoutView
+
 
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^login$',
+        LoginView.as_view(),
+        name='login'),
+    url(r'^logout$',
+        LogoutView.as_view(),
+        name='logout'),
+    url(r'^password_change/$',
+        'django.contrib.auth.views.password_change',
+        name='password_change'),
+    url(r'^password_change/done/$',
+        'django.contrib.auth.views.password_change_done',
+        name='password_change_done'),
 )
-
-from casia.server.urls import urlpatterns as server_urlpatterns
-from casia.webapp.urls import urlpatterns as webapp_urlpatterns
-
-urlpatterns += server_urlpatterns
-urlpatterns += webapp_urlpatterns

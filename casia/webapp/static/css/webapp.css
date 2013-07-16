@@ -1,0 +1,21 @@
+.center {
+  text-align: center;
+}
+
+body {
+  padding-top: 60px;
+  background-image: url(../img/grid.png);
+  background-repeat: repeat-x;
+}
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0px;
+}
+
+.alert-no-padding {
+  padding-right: 14px;
+}

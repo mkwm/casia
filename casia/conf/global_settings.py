@@ -14,6 +14,8 @@
 
 from datetime import timedelta
 
+from django.contrib.messages import constants as message
+
 
 # Default Casia settings. Override these with settings in the module
 # pointed-to by the DJANGO_SETTINGS_MODULE environment variable.
@@ -50,3 +52,10 @@ INSTALLED_APPS = (
 )
 
 CONSUMABLE_LIFETIME = timedelta(minutes=5)
+
+MESSAGE_TAGS = {
+    message.INFO: 'alert-info',
+    message.SUCCESS: 'alert-success',
+    message.WARNING: '',
+    message.ERROR: 'alert-error',
+}

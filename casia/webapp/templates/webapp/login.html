@@ -1,0 +1,39 @@
+{% extends 'webapp/base.html' %}
+{% load staticfiles %}
+{% block content %}
+          <div class="alert alert-info alert-no-padding">
+            <strong>Note:</strong> This page is only a preview of login page layout. It is not functional yet.
+          </div>
+          <form action="#" method="get">
+            <fieldset>
+              <div class="control-group margin-bottom">
+                <div class="controls">
+                  <img src="{% static 'img/logo.png' %}" alt="Casia">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on"><i class="icon-user"></i></span>
+                    <input type="text" placeholder="Username">
+                  </div>
+                </div>
+              </div>
+              <div class="control-group no-margin-bottom">
+                <div class="controls">
+                  <div class="input-prepend no-margin-bottom">
+                    <span class="add-on"><i class="icon-key"></i></span>
+                    <input type="password" placeholder="Password">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-large btn-primary">Log in</button>
+            </div>
+            <div class="alert alert-block alert-no-padding">
+              <h4><i class="icon-warning-sign"></i> Security warning</h4>
+              <p class="no-margin-bottom">Always check the address bar when logging in to Casia. Do not trust other sites with your password!</p>
+            </div>
+          </form>
+{% endblock %}
