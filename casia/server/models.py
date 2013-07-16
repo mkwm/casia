@@ -60,9 +60,9 @@ class AbstractConsumable(models.Model):
 class ServiceTicket(AbstractTicket, AbstractConsumable):
     objects = models.Manager()
     consumable = ServiceTicketManager()
-    
+
     prefix = 'ST'
-    
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     session = models.ForeignKey(Session)
     # IE is not able to handle GET requests to URLs longer than 2083 bytes
