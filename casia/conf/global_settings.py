@@ -59,3 +59,6 @@ MESSAGE_TAGS = {
     message.WARNING: '',
     message.ERROR: 'alert-error',
 }
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'

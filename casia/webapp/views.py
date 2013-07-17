@@ -13,14 +13,52 @@
 
 
 from django.contrib import messages
-from django.contrib.auth import logout as auth_logout
-from django.shortcuts import redirect
-from django.views.generic import TemplateView
+from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.base import View
 
+from casia.webapp.forms import AuthenticationForm, ReauthenticationForm
 
-class LoginView(TemplateView):
+
+class LoginView(View):
     template_name = 'webapp/login.html'
+
+    def get_form_class(self, request):
+        if not request.user.is_authenticated():
+            return AuthenticationForm
+        else:
+            return ReauthenticationForm
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            return render(request, 'webapp/logged_in.html')
+
+        form_class = self.get_form_class(request)
+        form = form_class(request)
+
+        request.session.set_test_cookie()
+
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form_class = self.get_form_class(request)
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            auth_login(request, form.get_user())
+            if request.session.test_cookie_worked():
+                request.session.delete_test_cookie()
+            return redirect('login')
+
+        request.session.set_test_cookie()
+
+        return render(request, self.template_name, {'form': form})
+
+    @method_decorator(sensitive_post_parameters())
+    def dispatch(self, *args, **kwargs):
+        return super(LoginView, self).dispatch(*args, **kwargs)
 
 
 class LogoutView(View):
