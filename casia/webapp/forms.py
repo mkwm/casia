@@ -31,5 +31,12 @@ class AuthenticationForm(DjangoAuthenticationForm):
 
 class ReauthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
+        if ('data' in kwargs and
+            kwargs['data']['username'] != kwargs['initial']['username']):
+            kwargs['data'] = kwargs.get('data', {}).copy()
+            kwargs['data']['username'] = kwargs['initial']['username']
         super(ReauthenticationForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['readonly'] = 'readonly'
+
+    def clean_username(self):
+        return self.initial['username']

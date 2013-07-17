@@ -14,15 +14,13 @@
 
 from django.conf.urls import patterns, url
 
-from casia.webapp.views import LoginView, LogoutView
-
 
 urlpatterns = patterns('',
     url(r'^login$',
-        LoginView.as_view(),
+        'casia.webapp.views.login',
         name='login'),
     url(r'^logout$',
-        LogoutView.as_view(),
+        'casia.webapp.views.logout',
         name='logout'),
     url(r'^password_change/$',
         'django.contrib.auth.views.password_change',

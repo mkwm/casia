@@ -42,7 +42,6 @@
       </div>
     </div>
     <div class="container-fluid">
-{% if messages %}
       <div class="row-fluid">
         <div class="span8 offset2">
 {% for message in messages %}
@@ -51,12 +50,9 @@
           	{{ message }}
           </div>
 {% endfor %}
-        </div>
-      </div>
-{% endif %}
-      <div class="row-fluid center">
-        <div class="span8 offset2">
-{% block content %}{% endblock %}
+          <div class="center">
+            {% block content %}{% endblock %}
+          </div>
         </div>
       </div>
     </div>
