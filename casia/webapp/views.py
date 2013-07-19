@@ -60,8 +60,10 @@ def login(request):
         from django.contrib.auth.views import login
         return login(request, template_name='webapp/login.html',
                           authentication_form=AuthenticationForm)
-    else:
+    elif request.GET.get(REDIRECT_FIELD_NAME):
         return relogin(request)
+    else:
+        return TemplateResponse(request, 'webapp/logged_in.html')
 
 
 def logout(request):
@@ -89,10 +91,7 @@ def cas_login(request):
             ticket_request.session_id = request.session.session_key
             return issue_ticket(ticket_request)
     else:
-        if request.user.is_authenticated():
-            return TemplateResponse(request, 'webapp/logged_in.html')
-        else:
-            return redirect('login')
+        return redirect('login')
 
 
 def cas_issue(request, ticket_request_uuid):
