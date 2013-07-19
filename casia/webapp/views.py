@@ -16,12 +16,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (login as auth_login, logout as auth_logout,
                                  REDIRECT_FIELD_NAME)
-from django.shortcuts import redirect, resolve_url
+from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url
 from django.views.decorators.debug import sensitive_post_parameters
 
+from casia.server.utils import issue_ticket
 from casia.webapp.forms import AuthenticationForm, ReauthenticationForm
+from casia.webapp.models import TicketRequest
 
 
 @sensitive_post_parameters()
@@ -72,3 +74,12 @@ def logout(request):
 
 def cas_login(request):
     raise NotImplementedError()
+
+
+def cas_issue(request, ticket_request_uuid):
+    ticket_request = get_object_or_404(TicketRequest, id=ticket_request_uuid)
+    if ticket_request.user:
+        return issue_ticket(ticket_request)
+    else:
+        # TODO: redirect to login page with ticket_request
+        raise NotImplementedError()

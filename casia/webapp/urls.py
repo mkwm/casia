@@ -15,6 +15,8 @@
 from django.conf.urls import patterns, url
 
 
+UUID_REGEX = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+
 urlpatterns = patterns('',
     url(r'^login$',
         'casia.webapp.views.login',
@@ -31,4 +33,7 @@ urlpatterns = patterns('',
     url(r'^cas/login$',
         'casia.webapp.views.cas_login',
         name='cas_login'),
+    url(r'^cas/issue/(?P<ticket_request_uuid>%s)$' % UUID_REGEX,
+        'casia.webapp.views.cas_issue',
+        name='cas_issue'),
 )
