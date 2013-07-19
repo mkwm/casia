@@ -77,7 +77,7 @@ def logout(request):
 def cas_login(request):
     ticket_request = TicketRequest()
     ticket_request.renewed = 'renew' in request.GET
-    ticket_request.service = request.GET.get('service')
+    ticket_request.url = request.GET.get('service')
     if ticket_request.url:
         if not request.user.is_authenticated() or 'renew' in request.GET:
             ticket_request.save()
@@ -103,4 +103,3 @@ def cas_issue(request, ticket_request_uuid):
         target = reverse('cas_issue',
                          kwargs={'ticket_request_uuid': ticket_request.id})
         return redirect_to_login(target)
-
