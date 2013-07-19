@@ -73,7 +73,23 @@ def logout(request):
 
 
 def cas_login(request):
-    raise NotImplementedError()
+    ticket_request = TicketRequest()
+    ticket_request.renewed = 'renew' in request.GET
+    ticket_request.service = request.GET.get('service')
+    if ticket_request.service:
+        if not request.user.is_authenticated() or 'renew' in request.GET:
+            ticket_request.save()
+            # TODO: redirect to login page with ticket_request
+            raise NotImplementedError()
+        else:
+            ticket_request.user = request.user
+            ticket_request.session_id = request.session.session_key
+            return issue_ticket(ticket_request)
+    else:
+        if request.user.is_authenticated():
+            return TemplateResponse(request, 'webapp/logged_in.html')
+        else:
+            return redirect('login')
 
 
 def cas_issue(request, ticket_request_uuid):
