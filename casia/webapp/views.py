@@ -68,3 +68,7 @@ def logout(request):
         messages.error(request, 'You have to be logged in to log out. '
                        'Please log in to log out.')
     return redirect('login')
+
+
+def cas_login(request):
+    raise NotImplementedError()

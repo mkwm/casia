@@ -28,4 +28,7 @@ urlpatterns = patterns('',
     url(r'^password_change/done/$',
         'django.contrib.auth.views.password_change_done',
         name='password_change_done'),
+    url(r'^cas/login$',
+        'casia.webapp.views.cas_login',
+        name='cas_login'),
 )
