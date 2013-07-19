@@ -16,6 +16,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (login as auth_login, logout as auth_logout,
                                  REDIRECT_FIELD_NAME)
+from django.contrib.auth.views import redirect_to_login
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url
@@ -79,8 +81,9 @@ def cas_login(request):
     if ticket_request.url:
         if not request.user.is_authenticated() or 'renew' in request.GET:
             ticket_request.save()
-            # TODO: redirect to login page with ticket_request
-            raise NotImplementedError()
+            target = reverse('cas_issue',
+                             kwargs={'ticket_request_uuid': ticket_request.id})
+            return redirect_to_login(target)
         else:
             ticket_request.user = request.user
             ticket_request.session_id = request.session.session_key
@@ -97,5 +100,7 @@ def cas_issue(request, ticket_request_uuid):
     if ticket_request.user:
         return issue_ticket(ticket_request)
     else:
-        # TODO: redirect to login page with ticket_request
-        raise NotImplementedError()
+        target = reverse('cas_issue',
+                         kwargs={'ticket_request_uuid': ticket_request.id})
+        return redirect_to_login(target)
+
