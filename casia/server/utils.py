@@ -12,6 +12,9 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from urlparse import urlparse, urlunparse
+
+from django.http import HttpResponseRedirect, QueryDict
 from django.utils.crypto import get_random_string
 
 from casia.server.exceptions import InvalidRequest
@@ -29,6 +32,29 @@ def validate_ticket(request):
     renew = 'renew' in request.GET
 
     if not service or not ticket:
-        raise InvalidRequest("'service' and 'ticket' parameters are both required.")
+        raise InvalidRequest("'service' and 'ticket' parameters are both"
+                             "required.")
 
     return ServiceTicket.consumable.validate(service, ticket, renew)
+
+
+def update_url(url, url_vars):
+    url_parts = list(urlparse(url))
+    qs = QueryDict(url_parts[4], mutable=True)
+    qs.update(url_vars)
+    url_parts[4] = qs.urlencode(safe='/')
+    return urlunparse(url_parts)
+
+
+def issue_ticket(ticket_request):
+    from casia.server.models import ServiceTicket
+
+    st = ServiceTicket(user=ticket_request.user,
+                       session=ticket_request.session,
+                       url=ticket_request.url,
+                       renewed=ticket_request.renewed)
+    st.save()
+
+    target = update_url(ticket_request.url, {'ticket': st.ticket})
+
+    return HttpResponseRedirect(target)
