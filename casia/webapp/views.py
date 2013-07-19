@@ -76,7 +76,7 @@ def cas_login(request):
     ticket_request = TicketRequest()
     ticket_request.renewed = 'renew' in request.GET
     ticket_request.service = request.GET.get('service')
-    if ticket_request.service:
+    if ticket_request.url:
         if not request.user.is_authenticated() or 'renew' in request.GET:
             ticket_request.save()
             # TODO: redirect to login page with ticket_request
