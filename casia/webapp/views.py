@@ -14,8 +14,10 @@
 
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout, REDIRECT_FIELD_NAME
+from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import redirect_to_login
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import resolve, reverse
+from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.views.decorators.debug import sensitive_post_parameters
@@ -74,3 +76,16 @@ def cas_issue(request, ticket_request_uuid):
         target = reverse('cas_issue',
                          kwargs={'ticket_request_uuid': ticket_request.id})
         return redirect_to_login(target)
+
+
+@receiver(user_logged_in)
+def ticket_request_updater(sender, request, user, **kwargs):
+    target = request.GET.get(REDIRECT_FIELD_NAME)
+    if target:
+        target = resolve(target)
+        if target.url_name == 'cas_issue':
+            uuid = target.kwargs['ticket_request_uuid']
+            ticket_request = TicketRequest.objects.get(id=uuid)
+            ticket_request.user = request.user
+            ticket_request.session_id = request.session.session_key
+            ticket_request.save()

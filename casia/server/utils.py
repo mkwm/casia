@@ -57,4 +57,5 @@ def issue_ticket(ticket_request):
 
     target = update_url(ticket_request.url, {'ticket': st.ticket})
 
+    # TODO: Remove validated ticket request from database
     return HttpResponseRedirect(target)
