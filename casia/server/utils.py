@@ -32,7 +32,7 @@ def validate_ticket(request):
     renew = 'renew' in request.GET
 
     if not service or not ticket:
-        raise InvalidRequest("'service' and 'ticket' parameters are both"
+        raise InvalidRequest("'service' and 'ticket' parameters are both "
                              "required.")
 
     return ServiceTicket.consumable.validate(service, ticket, renew)

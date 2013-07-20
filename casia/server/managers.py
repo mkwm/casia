@@ -40,14 +40,14 @@ class ServiceTicketManager(ConsumableManager):
             raise InvalidTicket("Ticket '%s' not recognized." % ticket)
 
         if st.url != service:
-            raise InvalidService("Ticket '%s' does not match supplied service"
+            raise InvalidService("Ticket '%s' does not match supplied service "
                                  "- the original service was '%s' and the"
                                  "supplied service was '%s'." %
                                  (st, st.url, service))
 
         if renew and not st.renewed:
-            raise InvalidTicket("Ticket '%s' does not match validation"
-                                "specification - was issued from single"
+            raise InvalidTicket("Ticket '%s' does not match validation "
+                                "specification - was issued from single "
                                 "sign-on session, but renew was requested." %
                                 ticket)
 
