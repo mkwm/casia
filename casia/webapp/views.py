@@ -12,56 +12,28 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import (login as auth_login, logout as auth_logout,
-                                 REDIRECT_FIELD_NAME)
+from django.contrib.auth import logout as auth_logout, REDIRECT_FIELD_NAME
 from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404, redirect, resolve_url
+from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.utils.http import is_safe_url
 from django.views.decorators.debug import sensitive_post_parameters
 
 from casia.server.utils import issue_ticket
-from casia.webapp.forms import AuthenticationForm, ReauthenticationForm
+from casia.webapp.forms import AuthenticationForm, ReauthenticationFormWrapper
 from casia.webapp.models import TicketRequest
 
 
 @sensitive_post_parameters()
-def relogin(request, template_name='webapp/relogin.html',
-            redirect_field_name=REDIRECT_FIELD_NAME,
-            reauthentication_form=ReauthenticationForm):
-    redirect_to = request.REQUEST.get(redirect_field_name, '')
-
-    if request.method == "POST":
-        form = reauthentication_form(data=request.POST,
-                                    initial={'username': request.user})
-        if form.is_valid():
-            if not is_safe_url(url=redirect_to, host=request.get_host()):
-                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
-
-            auth_login(request, form.get_user())
-
-            return redirect(redirect_to)
-    else:
-        form = reauthentication_form(request,
-                                     initial={'username': request.user})
-    context = {
-        'form': form,
-        redirect_field_name: redirect_to,
-    }
-    return TemplateResponse(request, template_name, context)
-
-
-@sensitive_post_parameters()
 def login(request):
+    from django.contrib.auth.views import login
     if not request.user.is_authenticated():
-        from django.contrib.auth.views import login
         return login(request, template_name='webapp/login.html',
-                          authentication_form=AuthenticationForm)
+            authentication_form=AuthenticationForm)
     elif request.GET.get(REDIRECT_FIELD_NAME):
-        return relogin(request)
+        return login(request, template_name='webapp/relogin.html',
+            authentication_form=ReauthenticationFormWrapper(user=request.user))
     else:
         return TemplateResponse(request, 'webapp/logged_in.html')
 

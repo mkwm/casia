@@ -40,3 +40,13 @@ class ReauthenticationForm(AuthenticationForm):
 
     def clean_username(self):
         return self.initial['username']
+
+
+class ReauthenticationFormWrapper(object):
+    def __init__(self, user):
+        self.username = user.username
+
+    def __call__(self, *args, **kwargs):
+        kwargs['initial'] = kwargs.get('initial', {})
+        kwargs['initial']['username'] = self.username
+        return ReauthenticationForm(*args, **kwargs)
