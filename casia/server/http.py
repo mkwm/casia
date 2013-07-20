@@ -12,14 +12,13 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf.urls import patterns, url
+from xml.etree.ElementTree import tostring
+
+from django.http import HttpResponse
 
 
-urlpatterns = patterns('',
-    url(r'^cas/validate$',
-        'casia.server.views.validate',
-        name='cas_validate'),
-    url(r'^cas/serviceValidate$',
-        'casia.server.views.service_validate',
-        name='cas_service_validate'),
-)
+class XMLResponse(HttpResponse):
+    def __init__(self, obj):
+        content = tostring(obj)
+        super(XMLResponse, self).__init__(content,
+                                          content_type='application/xhtml+xml')

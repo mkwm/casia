@@ -12,9 +12,12 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from xml.etree.ElementTree import Element, SubElement
+
 from django.http import HttpResponse
 
 from casia.server.exceptions import ValidationError
+from casia.server.http import XMLResponse
 from casia.server.utils import validate_ticket
 
 
@@ -26,3 +29,19 @@ def validate(request):
     except ValidationError:
         pass
     return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')
+
+
+# CAS 2.0 validation
+def service_validate(request):
+    response = Element('cas:serviceResponse',
+                       attrib={'xmlns:cas': 'http://www.yale.edu/tp/cas'})
+    try:
+        st = validate_ticket(request)
+        auth_success = SubElement(response, 'cas:authenticationSuccess')
+        user = SubElement(auth_success, 'cas:user')
+        user.text = st.user.username
+    except ValidationError as ex:
+        auth_failure = SubElement(response, 'cas:authenticationFailure',
+                                  attrib={'code': ex.code})
+        auth_failure.text = ex.msg
+    return XMLResponse(response)
