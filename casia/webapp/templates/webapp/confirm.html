@@ -2,8 +2,7 @@
 {% load staticfiles %}
 {% block content %}
 <h1>Confirmation</h1>
-<p class="lead">Authentication to service requires your consent</p>
-<p>Service URL is <strong>{{ ticket_request.url }}</strong></p>
+<p class="lead">Authentication to <strong>{% firstof ticket_request.policy.name ticket_request.url %}</strong> requires your consent</p>
 <form action="{{ app_path }}" method="post">{% csrf_token %}
   <fieldset>
     <div class="form-actions">
