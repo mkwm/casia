@@ -12,11 +12,15 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from urlparse import urlparse
+
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 from django.utils.timezone import now
 
 from casia.server.exceptions import InvalidService, InvalidTicket
+from casia.server.utils import get_url_netloc_patterns, get_url_path_patterns
 
 
 class ConsumableManager(models.Manager):
@@ -52,3 +56,30 @@ class ServiceTicketManager(ConsumableManager):
                                 ticket)
 
         return st
+
+
+class ServicePolicyManager(models.Manager):
+    def get_by_url(self, url):
+        # urlparse returns named tuple
+        # However, we need to edit it. Therefore we cast it to list.
+        # [0] = scheme, [1] = netloc, [2] = path, [4] = query
+        url = list(urlparse(url))
+
+        filters = Q(is_active=True) & Q(scheme__exact=url[0])
+
+        if not url[4]:
+            url[4] = '/'
+
+        values = ['']
+        if url[4]:
+            values.append(url[2] + '?' + url[4])
+        values += get_url_path_patterns(url)
+        path_filter = Q(netloc__exact=url[1]) & Q(path__in=values)
+
+        values = ['']
+        values += get_url_netloc_patterns(url)
+        netloc_filter = Q(netloc__in=values) & Q(path__exact='')
+
+        filters = filters & (path_filter | netloc_filter)
+
+        return self.filter(filters).order_by('-priority')[:1].get()

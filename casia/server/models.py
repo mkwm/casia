@@ -17,7 +17,8 @@ from django.contrib.sessions.models import Session
 from django.db import models
 from django.utils.timezone import now
 
-from casia.server.managers import ConsumableManager, ServiceTicketManager
+from casia.server.managers import (ConsumableManager, ServiceTicketManager,
+                                   ServicePolicyManager)
 from casia.server.utils import generate_ticket
 
 
@@ -70,4 +71,28 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     # nginx supports 8192 bytes in URLs by default
     # For that reasons, its safer to use TextField insted of CharField
     url = models.TextField()
+    policy = models.ForeignKey('ServicePolicy')
     renewed = models.BooleanField()
+
+
+class ServicePolicy(models.Model):
+    objects = ServicePolicyManager()
+
+    name = models.CharField(max_length=256, blank=True)
+    scheme = models.CharField(max_length=16)
+    netloc = models.CharField(max_length=256, blank=True)
+    path = models.CharField(max_length=256, blank=True)
+    priority = models.PositiveIntegerField(blank=True)
+    is_active = models.BooleanField()
+
+    def save(self, *args, **kwargs):
+        if not self.priority:
+            priority = 0
+            if self.name:
+                priority += 40
+            if self.netloc:
+                priority += 10
+            if self.path:
+                priority += 20
+            self.priority = priority
+        super(ServicePolicy, self).save(*args, **kwargs)

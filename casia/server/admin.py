@@ -14,11 +14,17 @@
 
 from django.contrib import admin
 
-from casia.server.models import ServiceTicket
+from casia.server.models import ServiceTicket, ServicePolicy
 
 
 class ServiceTicketAdmin(admin.ModelAdmin):
     list_display = ('ticket', 'created_at', 'is_consumable')
 
 
+class ServicePolicyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'scheme', 'netloc', 'path', 'priority',
+                    'is_active')
+
+
 admin.site.register(ServiceTicket, ServiceTicketAdmin)
+admin.site.register(ServicePolicy, ServicePolicyAdmin)

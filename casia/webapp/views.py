@@ -22,6 +22,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.views.decorators.debug import sensitive_post_parameters
 
+from casia.server.models import ServicePolicy
 from casia.server.utils import issue_ticket, update_url
 from casia.webapp.forms import AuthenticationForm, ReauthenticationFormWrapper
 from casia.webapp.models import TicketRequest
@@ -55,18 +56,23 @@ def cas_login(request):
     ticket_request.renewed = 'renew' in request.GET
     ticket_request.url = request.GET.get('service')
     if ticket_request.url:
-        if not request.user.is_authenticated() or 'renew' in request.GET:
-            ticket_request.save()
-            target = reverse('cas_issue',
+        try:
+            policy = ServicePolicy.objects.get_by_url(ticket_request.url)
+            ticket_request.policy = policy
+            if not request.user.is_authenticated() or 'renew' in request.GET:
+                ticket_request.save()
+                target = reverse('cas_issue',
                              kwargs={'ticket_request_uuid': ticket_request.id})
-            return redirect_to_login(target)
-        else:
-            ticket_request.user = request.user
-            ticket_request.session_id = request.session.session_key
-            ticket_request.save()
-            target = reverse('cas_issue',
+                return redirect_to_login(target)
+            else:
+                ticket_request.user = request.user
+                ticket_request.session_id = request.session.session_key
+                ticket_request.save()
+                target = reverse('cas_issue',
                              kwargs={'ticket_request_uuid': ticket_request.id})
-            return redirect(target)
+                return redirect(target)
+        except ServicePolicy.DoesNotExist:
+            return TemplateResponse(request, 'webapp/unknown.html')
     else:
         return redirect('login')
 

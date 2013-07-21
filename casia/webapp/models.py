@@ -18,10 +18,13 @@ from django.db import models
 
 from uuidfield import UUIDField
 
+from casia.server.models import ServicePolicy
+
 
 class TicketRequest(models.Model):
     id = UUIDField(auto=True, primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
     session = models.ForeignKey(Session, blank=True, null=True)
     url = models.TextField()
+    policy = models.ForeignKey(ServicePolicy)
     renewed = models.BooleanField()
