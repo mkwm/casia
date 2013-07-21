@@ -36,4 +36,8 @@ urlpatterns = patterns('',
     url(r'^cas/issue/(?P<ticket_request_uuid>%s)$' % UUID_REGEX,
         'casia.webapp.views.cas_issue',
         name='cas_issue'),
+    # TODO: At the moment, alias for logout
+    url(r'^cas/logout$',
+        'casia.webapp.views.logout',
+        name='cas_logout'),
 )
