@@ -1,0 +1,15 @@
+{% extends 'webapp/base.html' %}
+{% load staticfiles %}
+{% block content %}
+<h1>Confirmation</h1>
+<p class="lead">Authentication to service requires your consent</p>
+<p>Service URL is <strong>{{ ticket_request.url }}</strong></p>
+<form action="{{ app_path }}" method="post">{% csrf_token %}
+  <fieldset>
+    <div class="form-actions">
+      <button type="submit" name="continue" class="btn btn-large btn-success">Continue</button>
+      <a href="{{ abort_url }}" class="btn btn-large btn-danger">Abort</a>
+    </div>
+  </fieldset>
+</form>
+{% endblock %}
