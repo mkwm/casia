@@ -62,8 +62,6 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     objects = models.Manager()
     consumable = ServiceTicketManager()
 
-    prefix = 'ST'
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     session = models.ForeignKey(Session)
     # IE is not able to handle GET requests to URLs longer than 2083 bytes
@@ -73,15 +71,24 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     url = models.TextField()
     policy = models.ForeignKey('ServicePolicy')
     renewed = models.BooleanField()
+    pgt = models.ForeignKey('ProxyGrantingTicket', blank=True, null=True,
+                            related_name='+')
+
+    def save(self, *args, **kwargs):
+        if not self.pgt:
+            self.prefix = 'ST'
+        else:
+            self.prefix = 'PT'
+        super(ServiceTicket, self).save(*args, **kwargs)
 
 
 class ServicePolicy(models.Model):
     objects = ServicePolicyManager()
 
-    name = models.CharField(max_length=256, blank=True)
+    name = models.CharField(max_length=255, blank=True)
     scheme = models.CharField(max_length=16)
-    netloc = models.CharField(max_length=256, blank=True)
-    path = models.CharField(max_length=256, blank=True)
+    netloc = models.CharField(max_length=255, blank=True)
+    path = models.CharField(max_length=255, blank=True)
     priority = models.PositiveIntegerField(blank=True)
     is_active = models.BooleanField()
 
@@ -96,3 +103,11 @@ class ServicePolicy(models.Model):
                 priority += 20
             self.priority = priority
         super(ServicePolicy, self).save(*args, **kwargs)
+
+
+class ProxyGrantingTicket(AbstractTicket):
+    prefix = 'PGT'
+
+    iou = models.CharField(max_length=255, unique=True)
+    url = models.TextField()
+    st = models.OneToOneField('ServiceTicket')

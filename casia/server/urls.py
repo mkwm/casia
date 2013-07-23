@@ -19,12 +19,11 @@ urlpatterns = patterns('',
     url(r'^cas/validate$',
         'casia.server.views.validate',
         name='cas_validate'),
-    # TODO: At the moment those two behave in the same way
-    # Presence of proxyValidate makes it possible to test Casia using phpCAS
     url(r'^cas/serviceValidate$',
         'casia.server.views.service_validate',
         name='cas_service_validate'),
     url(r'^cas/proxyValidate$',
         'casia.server.views.service_validate',
+        {'require_st': False},
         name='cas_proxyvalidate'),
 )

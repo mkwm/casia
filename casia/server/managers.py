@@ -37,11 +37,16 @@ class ConsumableManager(models.Manager):
 
 
 class ServiceTicketManager(ConsumableManager):
-    def validate(self, service, ticket, renew):
+    def validate(self, service, ticket, renew, require_st):
         try:
             st = self.get_and_consume(ticket=ticket)
         except self.model.DoesNotExist:
             raise InvalidTicket("Ticket '%s' not recognized." % ticket)
+
+        if st.pgt and require_st:
+            raise InvalidService("Ticket '%s' is a proxy ticket, but only "
+                                 "service tickets are accepted." %
+                                 st)
 
         if st.url != service:
             raise InvalidService("Ticket '%s' does not match supplied service "

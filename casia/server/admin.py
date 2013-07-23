@@ -14,7 +14,8 @@
 
 from django.contrib import admin
 
-from casia.server.models import ServiceTicket, ServicePolicy
+from casia.server.models import (ServiceTicket, ServicePolicy,
+                                 ProxyGrantingTicket)
 
 
 class ServiceTicketAdmin(admin.ModelAdmin):
@@ -26,5 +27,10 @@ class ServicePolicyAdmin(admin.ModelAdmin):
                     'is_active')
 
 
+class ProxyGrantingTicketAdmin(admin.ModelAdmin):
+    list_display = ('ticket', 'iou', 'url', 'st')
+
+
 admin.site.register(ServiceTicket, ServiceTicketAdmin)
 admin.site.register(ServicePolicy, ServicePolicyAdmin)
+admin.site.register(ProxyGrantingTicket, ProxyGrantingTicketAdmin)
