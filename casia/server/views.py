@@ -16,9 +16,9 @@ from xml.etree.ElementTree import Element, SubElement
 
 from django.http import HttpResponse
 
-from casia.server.exceptions import ValidationError
+from casia.server.exceptions import Error
 from casia.server.http import XMLResponse
-from casia.server.utils import validate_ticket
+from casia.server.utils import issue_proxy_ticket, validate_ticket
 
 
 # CAS 1.0 validation
@@ -47,8 +47,23 @@ def service_validate(request, require_st=True):
                 proxy = SubElement(proxies, 'cas:proxy')
                 proxy.text = current.pgt.url
                 current = current.pgt.st
-    except ValidationError as ex:
+    except Error as ex:
         auth_failure = SubElement(response, 'cas:authenticationFailure',
                                   attrib={'code': ex.code})
         auth_failure.text = ex.msg
+    return XMLResponse(response)
+
+
+def proxy(request):
+    response = Element('cas:serviceResponse',
+                       attrib={'xmlns:cas': 'http://www.yale.edu/tp/cas'})
+    try:
+        proxy_success = SubElement(response, 'cas:proxySuccess')
+        pt = issue_proxy_ticket(request)
+        proxy_ticket = SubElement(proxy_success, 'cas:proxyTicket')
+        proxy_ticket.text = pt.ticket
+    except Error as ex:
+        proxy_failure = SubElement(response, 'cas:proxyFailure',
+                                   attrib={'code': ex.code})
+        proxy_failure.text = ex.msg
     return XMLResponse(response)

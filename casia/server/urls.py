@@ -26,4 +26,7 @@ urlpatterns = patterns('',
         'casia.server.views.service_validate',
         {'require_st': False},
         name='cas_proxyvalidate'),
+    url(r'^cas/proxy$',
+        'casia.server.views.proxy',
+        name='cas_proxy'),
 )

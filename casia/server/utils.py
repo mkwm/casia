@@ -18,7 +18,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, QueryDict
 from django.utils.crypto import get_random_string
 
-from casia.server.exceptions import InvalidRequest
+from casia.server.exceptions import InvalidRequest, InvalidService
 
 
 def generate_ticket(prefix, length):
@@ -48,7 +48,7 @@ def update_url(url, url_vars):
     return urlunparse(url_parts)
 
 
-def issue_ticket(ticket_request):
+def issue_service_ticket(ticket_request):
     from casia.server.models import ServiceTicket
 
     st = ServiceTicket(user=ticket_request.user,
@@ -62,6 +62,30 @@ def issue_ticket(ticket_request):
 
     # TODO: Remove validated ticket request from database
     return HttpResponseRedirect(target)
+
+
+def issue_proxy_ticket(request):
+    from casia.server.models import (ProxyGrantingTicket, ServicePolicy,
+                                     ServiceTicket)
+
+    url = request.GET.get('targetService')
+    pgt = ProxyGrantingTicket.objects.get_by_request(request)
+    policy = None
+
+    try:
+        policy = ServicePolicy.objects.get_by_url(url)
+    except ServicePolicy.DoesNotExist:
+        raise InvalidService("Service '%s' is not known to Caisa." % url)
+
+    pt = ServiceTicket(user=pgt.st.user,
+                       session=pgt.st.session,
+                       url=url,
+                       policy=policy,
+                       renewed=False,
+                       pgt=pgt)
+    pt.save()
+
+    return pt
 
 
 def get_url_netloc_patterns(url, count=settings.POLICY_NETLOC_COMPONENTS):

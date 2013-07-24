@@ -19,7 +19,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.timezone import now
 
-from casia.server.exceptions import InvalidService, InvalidTicket
+from casia.server.exceptions import (BadPGT, InvalidRequest, InvalidService,
+                                     InvalidTicket)
 from casia.server.utils import get_url_netloc_patterns, get_url_path_patterns
 
 
@@ -88,3 +89,22 @@ class ServicePolicyManager(models.Manager):
         filters = filters & (path_filter | netloc_filter)
 
         return self.filter(filters).order_by('-priority')[:1].get()
+
+
+class ProxyGrantingTicketManager(models.Manager):
+    def get_by_request(self, request):
+        ticket = request.GET.get('pgt')
+        service = request.GET.get('targetService')
+
+        pgt = None
+
+        if not ticket or not service:
+            raise InvalidRequest("'pgt' and 'targetService' parameters are"
+                                 "both required.")
+
+        try:
+            pgt = self.get(ticket=ticket)
+        except self.model.DoesNotExist:
+            raise BadPGT("Ticket '%s' not recognized." % ticket)
+
+        return pgt

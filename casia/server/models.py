@@ -17,8 +17,9 @@ from django.contrib.sessions.models import Session
 from django.db import models
 from django.utils.timezone import now
 
-from casia.server.managers import (ConsumableManager, ServiceTicketManager,
-                                   ServicePolicyManager)
+from casia.server.managers import (ConsumableManager,
+                                   ProxyGrantingTicketManager,
+                                   ServiceTicketManager, ServicePolicyManager)
 from casia.server.utils import generate_ticket
 
 
@@ -106,6 +107,8 @@ class ServicePolicy(models.Model):
 
 
 class ProxyGrantingTicket(AbstractTicket):
+    objects = ProxyGrantingTicketManager()
+
     prefix = 'PGT'
 
     iou = models.CharField(max_length=255, unique=True)

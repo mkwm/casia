@@ -23,7 +23,7 @@ from django.template.response import TemplateResponse
 from django.views.decorators.debug import sensitive_post_parameters
 
 from casia.server.models import ServicePolicy
-from casia.server.utils import issue_ticket, update_url
+from casia.server.utils import issue_service_ticket, update_url
 from casia.webapp.forms import AuthenticationForm, ReauthenticationFormWrapper
 from casia.webapp.models import TicketRequest
 
@@ -82,7 +82,7 @@ def cas_issue(request, ticket_request_uuid):
     if ticket_request.user:
         # TODO: Confirmation per session or depending on service status
         if 'continue' in request.POST:
-            return issue_ticket(ticket_request)
+            return issue_service_ticket(ticket_request)
         else:
             context = {'ticket_request': ticket_request,
                        'abort_url':
