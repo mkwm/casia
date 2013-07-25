@@ -59,7 +59,8 @@ def cas_login(request):
         try:
             policy = ServicePolicy.objects.get_by_url(ticket_request.url)
             ticket_request.policy = policy
-            if not request.user.is_authenticated() or 'renew' in request.GET:
+            if (not request.user.is_authenticated() or 'renew' in request.GET
+                or not policy.allow_single_login):
                 ticket_request.save()
                 target = reverse('cas_issue',
                              kwargs={'ticket_request_uuid': ticket_request.id})
