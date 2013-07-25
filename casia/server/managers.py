@@ -13,6 +13,8 @@
 
 
 from urlparse import urlparse
+import requests
+from requests.exceptions import SSLError
 
 from django.conf import settings
 from django.db import models
@@ -21,7 +23,8 @@ from django.utils.timezone import now
 
 from casia.server.exceptions import (BadPGT, InvalidRequest, InvalidService,
                                      InvalidTicket)
-from casia.server.utils import get_url_netloc_patterns, get_url_path_patterns
+from casia.server.utils import (generate_ticket, get_url_netloc_patterns,
+                                get_url_path_patterns, update_url)
 
 
 class ConsumableManager(models.Manager):
@@ -107,4 +110,30 @@ class ProxyGrantingTicketManager(models.Manager):
         except self.model.DoesNotExist:
             raise BadPGT("Ticket '%s' not recognized." % ticket)
 
+        return pgt
+
+    def create_for_request(self, request):
+        pgt_url = request.GET.get('pgtUrl')
+
+        pgt = None
+
+        if pgt_url:
+            urlparts = list(urlparse(pgt_url))
+            if urlparts[0] == 'https':
+                ticket = generate_ticket('PGT', 32)
+                iou = generate_ticket('PGTIOU', 32)
+                callback = update_url(pgt_url, {'pgtId': ticket,
+                                                'pgtIou': iou})
+                try:
+                    r = requests.get(callback)
+                    if r.status_code in (200, 301, 302):
+                        st_id = request.GET.get('ticket')
+                        pgt = self.model(ticket=ticket,
+                                         iou=iou,
+                                         url=pgt_url,
+                                         st_id=st_id)
+                        pgt.save()
+                except SSLError:
+                    # TODO: This incident should be reported
+                    pass
         return pgt

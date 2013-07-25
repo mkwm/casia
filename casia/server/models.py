@@ -87,11 +87,14 @@ class ServicePolicy(models.Model):
     objects = ServicePolicyManager()
 
     name = models.CharField(max_length=255, blank=True)
+    owner = models.CharField(max_length=255, blank=True, null=True)
     scheme = models.CharField(max_length=16)
     netloc = models.CharField(max_length=255, blank=True)
     path = models.CharField(max_length=255, blank=True)
     priority = models.PositiveIntegerField(blank=True)
     is_active = models.BooleanField()
+    allow_proxy = models.BooleanField()
+    allow_single_login = models.BooleanField()
 
     def save(self, *args, **kwargs):
         if not self.priority:

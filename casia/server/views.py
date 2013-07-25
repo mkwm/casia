@@ -18,6 +18,7 @@ from django.http import HttpResponse
 
 from casia.server.exceptions import Error
 from casia.server.http import XMLResponse
+from casia.server.models import ProxyGrantingTicket
 from casia.server.utils import issue_proxy_ticket, validate_ticket
 
 
@@ -26,7 +27,7 @@ def validate(request):
     st = None
     try:
         st = validate_ticket(request)
-    except ValidationError:
+    except Error:
         pass
     return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')
 
@@ -40,6 +41,12 @@ def service_validate(request, require_st=True):
         auth_success = SubElement(response, 'cas:authenticationSuccess')
         user = SubElement(auth_success, 'cas:user')
         user.text = st.user.username
+
+        pgt = ProxyGrantingTicket.objects.create_for_request(request)
+        if pgt:
+            pgt_iou = SubElement(auth_success, 'cas:proxyGrantingTicket')
+            pgt_iou.text = pgt.iou
+
         if st.pgt:
             proxies = SubElement(auth_success, 'cas:proxies')
             current = st
