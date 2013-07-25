@@ -14,6 +14,7 @@
 
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout, REDIRECT_FIELD_NAME
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import resolve, reverse
@@ -28,6 +29,11 @@ from casia.webapp.forms import AuthenticationForm, ReauthenticationFormWrapper
 from casia.webapp.models import TicketRequest
 
 
+@login_required
+def index(request):
+    return TemplateResponse(request, 'webapp/logged_in.html')
+
+
 @sensitive_post_parameters()
 def login(request):
     from django.contrib.auth.views import login
@@ -38,7 +44,7 @@ def login(request):
         return login(request, template_name='webapp/relogin.html',
             authentication_form=ReauthenticationFormWrapper(user=request.user))
     else:
-        return TemplateResponse(request, 'webapp/logged_in.html')
+        return redirect('index')
 
 
 def logout(request):
@@ -75,7 +81,7 @@ def cas_login(request):
         except ServicePolicy.DoesNotExist:
             return TemplateResponse(request, 'webapp/unknown.html')
     else:
-        return redirect('login')
+        return redirect('index')
 
 
 def cas_issue(request, ticket_request_uuid):

@@ -18,6 +18,9 @@ from django.conf.urls import patterns, url
 UUID_REGEX = '[0-9a-f]{32}'
 
 urlpatterns = patterns('',
+    url(r'^$',
+        'casia.webapp.views.index',
+        name='index'),
     url(r'^login$',
         'casia.webapp.views.login',
         name='login'),
