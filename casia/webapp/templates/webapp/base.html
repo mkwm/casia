@@ -17,7 +17,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="#">Casia</a>
+          <a class="brand" href="{% url 'index' %}">Casia</a>
 {% if user.is_authenticated %}
           <ul class="nav pull-right">
             <li class="dropdown">
@@ -35,8 +35,6 @@
               </ul>
             </li>
           </ul>
-{% else %}
-          <p class="pull-right navbar-text">Not logged in</p>
 {% endif %}
         </div>
       </div>
