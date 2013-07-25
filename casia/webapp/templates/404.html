@@ -1,9 +1,8 @@
 {% extends 'webapp/base.html' %}
 {% load staticfiles %}
 {% block content %}
-<h1>Server error <span class="muted">(500)</span></h1>
-<p class="lead">Casia was unable to process your request due to internal error</p>
-<p>Please try again later. If problems persist, contact your administrator.</p>
+<h1>Not found <span class="muted">(404)</span></h1>
+<p class="lead">The requested URL {{ request_path }} was not found on this server</p>
 <!--                                                                            
                                                                                 
                                                                                 
