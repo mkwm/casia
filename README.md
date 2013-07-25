@@ -38,7 +38,8 @@ are secured with TLS SNI, they won't be able to obtain proxy granting tickets.
 You can add support for TLS SNI by installing urllib3, pyOpenSSL, pyasn1 and
 ndg-httpsclient. Then you need to include the following lines in your settings
 file (or sitecustomize/usercustomize module):
-```import urllib3.contrib.pyopenssl
+```
+import urllib3.contrib.pyopenssl
 urllib3.contrib.pyopenssl.inject_into_urllib3()
 ```
 
