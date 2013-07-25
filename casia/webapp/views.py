@@ -67,10 +67,13 @@ def cas_login(request):
             ticket_request.policy = policy
             if (not request.user.is_authenticated() or 'renew' in request.GET
                 or not policy.allow_single_login):
-                ticket_request.save()
-                target = reverse('cas_issue',
+                if 'gateway' in request.GET:
+                    return redirect(ticket_request.url)
+                else:
+                    ticket_request.save()
+                    target = reverse('cas_issue',
                              kwargs={'ticket_request_uuid': ticket_request.id})
-                return redirect_to_login(target)
+                    return redirect_to_login(target)
             else:
                 ticket_request.user = request.user
                 ticket_request.session_id = request.session.session_key
