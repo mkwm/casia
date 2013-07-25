@@ -42,18 +42,19 @@ def service_validate(request, require_st=True):
         user = SubElement(auth_success, 'cas:user')
         user.text = st.user.username
 
-        pgt = ProxyGrantingTicket.objects.create_for_request(request)
-        if pgt:
-            pgt_iou = SubElement(auth_success, 'cas:proxyGrantingTicket')
-            pgt_iou.text = pgt.iou
+        if st.policy.allow_proxy:
+            pgt = ProxyGrantingTicket.objects.create_for_request(request)
+            if pgt:
+                pgt_iou = SubElement(auth_success, 'cas:proxyGrantingTicket')
+                pgt_iou.text = pgt.iou
 
-        if st.pgt:
-            proxies = SubElement(auth_success, 'cas:proxies')
-            current = st
-            while current.pgt:
-                proxy = SubElement(proxies, 'cas:proxy')
-                proxy.text = current.pgt.url
-                current = current.pgt.st
+            if st.pgt:
+                proxies = SubElement(auth_success, 'cas:proxies')
+                current = st
+                while current.pgt:
+                    proxy = SubElement(proxies, 'cas:proxy')
+                    proxy.text = current.pgt.url
+                    current = current.pgt.st
     except Error as ex:
         auth_failure = SubElement(response, 'cas:authenticationFailure',
                                   attrib={'code': ex.code})
