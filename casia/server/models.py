@@ -12,9 +12,16 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from urlparse import urlparse
+import requests
+from uuid import uuid4
+from xml.etree.ElementTree import Element, SubElement, tostring
+
 from django.conf import settings
 from django.contrib.sessions.models import Session
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch.dispatcher import receiver
 from django.utils.timezone import now
 
 from casia.server.managers import (ConsumableManager,
@@ -95,6 +102,7 @@ class ServicePolicy(models.Model):
     is_active = models.BooleanField()
     allow_proxy = models.BooleanField()
     allow_single_login = models.BooleanField()
+    allow_single_logout = models.BooleanField()
 
     def save(self, *args, **kwargs):
         if not self.priority:
@@ -117,3 +125,29 @@ class ProxyGrantingTicket(AbstractTicket):
     iou = models.CharField(max_length=255, unique=True)
     url = models.TextField()
     st = models.OneToOneField('ServiceTicket')
+
+
+@receiver(post_delete, sender=ServiceTicket)
+def _st_post_delete(sender, instance, **kwargs):
+    if instance.policy.allow_single_logout:
+        urlparts = urlparse(instance.url)
+        if urlparts.scheme in ('http', 'https'):
+            time = now()
+            instant = time.isoformat()
+            if time.microsecond:
+                instant = instant[:23] + instant[26:]
+            if instant.endswith('+00:00'):
+                instant = instant[:-6] + 'Z'
+            request = Element('samlp:LogoutRequest',
+                              attrib={'ID': str(uuid4()),
+                                      'IssueInstant': instant,
+                                      'Version': '2.0'})
+            name_id = SubElement(request, 'saml:NameID')
+            name_id.text = instance.user.get_username()
+            session_index = SubElement(request, 'samlp:SessionIndex')
+            session_index.text = instance.ticket
+            try:
+                requests.post(instance.url,
+                              data={'logoutRequest': tostring(request)})
+            except:
+                pass
