@@ -40,7 +40,7 @@ def service_validate(request, require_st=True):
         st = validate_ticket(request, require_st)
         auth_success = SubElement(response, 'cas:authenticationSuccess')
         user = SubElement(auth_success, 'cas:user')
-        user.text = st.user.username
+        user.text = st.user.get_username()
 
         if st.policy.allow_proxy:
             pgt = ProxyGrantingTicket.objects.create_for_request(request)

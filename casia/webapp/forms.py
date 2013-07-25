@@ -44,7 +44,7 @@ class ReauthenticationForm(AuthenticationForm):
 
 class ReauthenticationFormWrapper(object):
     def __init__(self, user):
-        self.username = user.username
+        self.username = user.get_username()
 
     def __call__(self, *args, **kwargs):
         kwargs['initial'] = kwargs.get('initial', {})
