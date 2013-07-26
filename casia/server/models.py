@@ -100,6 +100,7 @@ class ServicePolicy(models.Model):
     path = models.CharField(max_length=255, blank=True)
     priority = models.PositiveIntegerField(blank=True)
     is_active = models.BooleanField()
+    is_trusted = models.BooleanField()
     allow_proxy = models.BooleanField()
     allow_single_login = models.BooleanField()
     allow_single_logout = models.BooleanField()

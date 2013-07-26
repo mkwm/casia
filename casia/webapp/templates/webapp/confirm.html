@@ -3,6 +3,15 @@
 {% block content %}
 <h1>Confirmation</h1>
 <p class="lead">Authentication to <strong>{% firstof ticket_request.policy.name ticket_request.url %}</strong> requires your consent</p>
+{% if ticket_request.policy.owner %}
+{% if ticket_request.policy.is_trusted %}
+<p class="text-success"><i class="icon-ok-sign"></i> Service is operated by <strong>{{ ticket_request.policy.owner }}</strong> (trusted provider)</p>
+{% else %}
+<p class="text-info"><i class="icon-info-sign"></i> Service is operated by <strong>{{ ticket_request.policy.owner }}</strong></p>
+{% endif %}
+{% else %}
+<p class="text-warning"><i class="icon-warning-sign"></i> Service is operated by unknown provider &ndash; <strong>be careful!</strong></p>
+{% endif %}
 <form action="{{ app_path }}" method="post">{% csrf_token %}
   <fieldset>
     <div class="form-actions">
