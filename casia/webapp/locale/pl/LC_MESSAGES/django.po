@@ -1,0 +1,123 @@
+# This file is part of Casia - CAS server based on Django
+# Copyright (C) 2013 Mateusz Małek
+# Casia is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+# You should have received a copy of the GNU Affero General Public License
+# along with Casia. If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: Casia\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-07-26 21:05+0200\n"
+"PO-Revision-Date: 2013-07-26 20:49+0200\n"
+"Last-Translator: Mateusz Małek <mkwm@mkwm.eu.org>\n"
+"Language-Team: Mateusz Małek <mkwm@mkwm.eu.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: templates/webapp/base.html:31
+msgid "Admin site"
+msgstr "Panel administracyjny"
+
+#: templates/webapp/base.html:33
+msgid "Change password"
+msgstr "Zmień hasło"
+
+#: templates/webapp/base.html:35
+msgid "Log out"
+msgstr "Wyloguj"
+
+#: templates/webapp/confirm.html:4
+msgid "Confirmation"
+msgstr "Potwierdzenie"
+
+#: templates/webapp/confirm.html:6
+msgid "Authentication to <strong>%(name)s</strong> requires your consent"
+msgstr "Uwierzytelnienie do <strong>%(name)s</strong> wymaga twojej zgody"
+
+#: templates/webapp/confirm.html:8
+msgid ""
+"Authentication to service at <strong>%(url)s</strong> requires your consent"
+msgstr ""
+"Uwierzytelnienie do usługi pod adresem <strong>%(url)s</strong> wymaga "
+"twojej zgody"
+
+#: templates/webapp/confirm.html:12
+#, python-format
+msgid "Service is operated by <strong>%(owner)s</strong> (trusted provider)"
+msgstr ""
+"Usługa jest obsługiwana przez <strong>%(owner)s</strong> (zaufany dostawca)"
+
+#: templates/webapp/confirm.html:14
+#, python-format
+msgid "Service is operated by <strong>%(owner)s</strong>"
+msgstr "Usługa jest obsługiwana przez <strong>%(owner)s</strong>"
+
+#: templates/webapp/confirm.html:17
+msgid ""
+"Service is operated by unknown provider &ndash; <strong>be careful!</strong>"
+msgstr ""
+"Usługa jest obsługiwana przez nieznanego dostawcę &ndash; <strong>zachowaj "
+"ostrożność!</strong>"
+
+#: templates/webapp/confirm.html:22
+msgid "Continue"
+msgstr "Kontynuuj"
+
+#: templates/webapp/confirm.html:23
+msgid "Abort"
+msgstr "Przerwij"
+
+#: templates/webapp/logged_in.html:4
+msgid "Logged in"
+msgstr "Zalogowany"
+
+#: templates/webapp/logged_in.html:5
+msgid "You are logged into Casia"
+msgstr "Jesteś zalogowany w Casia"
+
+#: templates/webapp/logged_in.html:6
+msgid "Authentication to services would be performed automatically"
+msgstr "Uwierzytelnianie do usług będzie wykonywane automatyczne"
+
+#: templates/webapp/login_form.html:30
+msgid "Log in"
+msgstr "Zaloguj"
+
+#: templates/webapp/login_form.html:33
+msgid "Security warning"
+msgstr "Ostrzeżenie bezpieczeństwa"
+
+#: templates/webapp/login_form.html:34
+msgid ""
+"Always check the address bar when logging in to Casia. Do not trust other "
+"sites with your password!"
+msgstr ""
+"Zawsze sprawdzaj pasek adresu przed zalogowaniem się do Casia. Nie podawaj "
+"swojego hasła na innych stronach!"
+
+#: templates/webapp/relogin.html:4
+msgid "Reauthentication"
+msgstr "Ponowne uwierzytelnienie"
+
+#: templates/webapp/relogin.html:5
+msgid "Renew your credentials for security reasons"
+msgstr "Ze względów bezpieczeństwa zaloguj się ponownie"
+
+#: templates/webapp/unknown.html:4
+msgid "Unknown service"
+msgstr "Nieznana usługa"
+
+#: templates/webapp/unknown.html:5
+msgid "Authentication aborted due to security reasons"
+msgstr "Uwierzytelnianie przerwane ze względów bezpieczeństwa"
+
+#: templates/webapp/unknown.html:6
+msgid "Service is not known to Casia"
+msgstr "Usługa nie jest znana w Casia"
