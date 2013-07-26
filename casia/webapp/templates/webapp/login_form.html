@@ -1,3 +1,4 @@
+{% load i18n %}
 <form action="{{ app_path }}" method="post">{% csrf_token %}
 {% for error in form.non_field_errors %}
   <p class="text-error">{{ error }}</p>
@@ -26,11 +27,11 @@
       </div>
     </div>
     <div class="form-actions">
-      <button type="submit" class="btn btn-large btn-primary">Log in</button>
+      <button type="submit" class="btn btn-large btn-primary">{% trans 'Log in' %}</button>
     </div>
     <div class="alert alert-block alert-no-padding">
-      <h4><i class="icon-warning-sign"></i> Security warning</h4>
-      <p class="no-margin-bottom">Always check the address bar when logging in to Casia. Do not trust other sites with your password!</p>
+      <h4><i class="icon-warning-sign"></i> {% trans 'Security warning' %}</h4>
+      <p class="no-margin-bottom">{% trans 'Always check the address bar when logging in to Casia. Do not trust other sites with your password!' %}</p>
     </div>
   </fieldset>
 </form>

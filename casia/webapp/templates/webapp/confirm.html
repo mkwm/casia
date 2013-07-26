@@ -1,22 +1,26 @@
 {% extends 'webapp/base.html' %}
-{% load staticfiles %}
+{% load i18n %}
 {% block content %}
-<h1>Confirmation</h1>
-<p class="lead">Authentication to <strong>{% firstof ticket_request.policy.name ticket_request.url %}</strong> requires your consent</p>
+<h1>{% trans 'Confirmation' %}</h1>
+{% if ticket_request.policy.name %}
+<p class="lead">{% blocktrans with name=ticket_request.policy.name %}Authentication to <strong>{{ name }}</strong> requires your consent{% endblocktrans %}</p>
+{% else %}
+<p class="lead">{% blocktrans with url=ticket_request.url %}Authentication to service at <strong>{{ url }}</strong> requires your consent{% endblocktrans %}</p>
+{% endif %}
 {% if ticket_request.policy.owner %}
 {% if ticket_request.policy.is_trusted %}
-<p class="text-success"><i class="icon-ok-sign"></i> Service is operated by <strong>{{ ticket_request.policy.owner }}</strong> (trusted provider)</p>
+<p class="text-success"><i class="icon-ok-sign"></i> {% blocktrans with owner=ticket_request.policy.owner %}Service is operated by <strong>{{ owner }}</strong> (trusted provider){% endblocktrans %}</p>
 {% else %}
-<p class="text-info"><i class="icon-info-sign"></i> Service is operated by <strong>{{ ticket_request.policy.owner }}</strong></p>
+<p class="text-info"><i class="icon-info-sign"></i> {% blocktrans with owner=ticket_request.policy.owner %}Service is operated by <strong>{{ owner }}</strong>{% endblocktrans %}</p>
 {% endif %}
 {% else %}
-<p class="text-warning"><i class="icon-warning-sign"></i> Service is operated by unknown provider &ndash; <strong>be careful!</strong></p>
+<p class="text-warning"><i class="icon-warning-sign"></i> {% blocktrans %}Service is operated by unknown provider &ndash; <strong>be careful!</strong>{% endblocktrans %}</p>
 {% endif %}
 <form action="{{ app_path }}" method="post">{% csrf_token %}
   <fieldset>
     <div class="form-actions">
-      <button type="submit" name="continue" class="btn btn-large btn-success">Continue</button>
-      <a href="{{ abort_url }}" class="btn btn-large btn-danger">Abort</a>
+      <button type="submit" name="continue" class="btn btn-large btn-success">{% trans 'Continue' %}</button>
+      <a href="{{ abort_url }}" class="btn btn-large btn-danger">{% trans 'Abort' %}</a>
     </div>
   </fieldset>
 </form>
