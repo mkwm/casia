@@ -19,3 +19,13 @@ body {
 .alert-no-padding {
   padding-right: 14px;
 }
+
+.table-profile th {
+  text-align: right;
+  width: 50%;
+}
+
+.table-profile td {
+  text-align: left;
+  width: 50%;
+}

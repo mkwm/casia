@@ -94,7 +94,17 @@ def cas_issue(request, ticket_request_uuid):
         if 'continue' in request.POST:
             return issue_service_ticket(ticket_request)
         else:
+            fields = ticket_request.policy.field_permissions.all()
+            profile = {}
+            for f in fields:
+                try:
+                    key = ticket_request.user._meta.get_field_by_name(f.field)[0].verbose_name
+                    profile[key] = getattr(ticket_request.user, f.field)
+                except AttributeError:
+                    # TODO: Should it be ignored?
+                    pass
             context = {'ticket_request': ticket_request,
+                       'profile': profile,
                        'abort_url':
                        update_url(ticket_request.url,
                            {'ticket': 'ST-AuthenticationAbortedByUser'})}
