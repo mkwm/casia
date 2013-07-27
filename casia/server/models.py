@@ -104,6 +104,7 @@ class ServicePolicy(models.Model):
     allow_proxy = models.BooleanField()
     allow_single_login = models.BooleanField()
     allow_single_logout = models.BooleanField()
+    field_permissions = models.ManyToManyField('FieldPermission', blank=True)
 
     def save(self, *args, **kwargs):
         if not self.priority:
@@ -126,6 +127,13 @@ class ProxyGrantingTicket(AbstractTicket):
     iou = models.CharField(max_length=255, unique=True)
     url = models.TextField()
     st = models.OneToOneField('ServiceTicket')
+
+
+class FieldPermission(models.Model):
+    field = models.CharField(max_length=255, primary_key=True)
+
+    def __unicode__(self):
+        return self.field
 
 
 @receiver(post_delete, sender=ServiceTicket)
