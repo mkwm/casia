@@ -18,7 +18,7 @@ from django.http import HttpResponse
 
 from casia.server.exceptions import Error
 from casia.server.http import XMLResponse
-from casia.server.models import ProxyGrantingTicket
+from casia.server.models import FieldPermission, ProxyGrantingTicket
 from casia.server.utils import issue_proxy_ticket, validate_ticket
 
 
@@ -55,6 +55,29 @@ def service_validate(request, require_st=True):
                     proxy = SubElement(proxies, 'cas:proxy')
                     proxy.text = current.pgt.url
                     current = current.pgt.st
+
+        attributes = SubElement(auth_success, 'cas:attributes')
+        fields = (FieldPermission.objects.all() if st.policy.is_trusted
+                  else st.policy.field_permissions.all())
+        for f in fields:
+            try:
+                key = f.field
+                value = getattr(st.user, key)
+                try:
+                    if isinstance(value, basestring):
+                        raise TypeError('Object is not to be iterated')
+                    iterator = iter(value)
+                    for value in iterator:
+                        attribute = SubElement(attributes, 'cas:%s' % key)
+                        attribute.text = '%s' % value
+                except TypeError:
+                    attribute = SubElement(attributes, 'cas:%s' % key)
+                    attribute.text = '%s' % value
+            except AttributeError:
+                # TODO: Should it be ignored or should it cause INTERNAL_ERROR?
+                pass
+        if len(attributes) == 0:
+            auth_success.remove(attributes)
     except Error as ex:
         auth_failure = SubElement(response, 'cas:authenticationFailure',
                                   attrib={'code': ex.code})
