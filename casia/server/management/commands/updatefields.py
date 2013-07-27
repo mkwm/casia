@@ -12,6 +12,7 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
@@ -29,11 +30,22 @@ class Command(BaseCommand):
         field_names = [f.name for f in model._meta.fields]
         property_names = [name for name in dir(model)
                           if isinstance(getattr(model, name), property)]
-        code_fields = set(field_names + property_names)
+        code_fields = (set(field_names + property_names) -
+                       set(settings.USER_MODEL_PROTECTED_FIELDS))
 
         to_create = code_fields - db_fields
+        print 'Fields to create in database:'
+        for i in to_create:
+            print '-', i
         bulk_create = [FieldPermission(field=field) for field in to_create]
         FieldPermission.objects.bulk_create(bulk_create)
 
-        bulk_delete = db_fields - code_fields
-        FieldPermission.objects.filter(field__in=bulk_delete).delete()
+        print
+
+        to_delete = db_fields - code_fields
+        print 'Fields to delete from database:'
+        for i in to_delete:
+            print '-', i
+        FieldPermission.objects.filter(field__in=to_delete).delete()
+
+        print
