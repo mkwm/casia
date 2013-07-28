@@ -61,18 +61,7 @@ def service_validate(request, require_st=True):
                   else st.policy.field_permissions.all())
         for f in fields:
             try:
-                key = f.field
-                value = getattr(st.user, key)
-                try:
-                    if isinstance(value, basestring):
-                        raise TypeError('Object is not to be iterated')
-                    iterator = iter(value)
-                    for value in iterator:
-                        attribute = SubElement(attributes, 'cas:%s' % key)
-                        attribute.text = '%s' % value
-                except TypeError:
-                    attribute = SubElement(attributes, 'cas:%s' % key)
-                    attribute.text = '%s' % value
+                attributes.extend(f.serializer.to_xml(st.user, f.field))
             except AttributeError:
                 # TODO: Should it be ignored or should it cause INTERNAL_ERROR?
                 pass

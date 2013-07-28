@@ -24,6 +24,9 @@ from django.db.models.signals import post_delete
 from django.dispatch.dispatcher import receiver
 from django.utils.timezone import now
 
+from casia.core.fields import SubclassField
+from casia.core.serializers import ModelFieldSerializer
+from casia.core.utils import get_class_by_dotted_name
 from casia.server.managers import (ConsumableManager,
                                    ProxyGrantingTicketManager,
                                    ServiceTicketManager, ServicePolicyManager)
@@ -131,6 +134,15 @@ class ProxyGrantingTicket(AbstractTicket):
 
 class FieldPermission(models.Model):
     field = models.CharField(max_length=255, primary_key=True)
+    serializer_name = SubclassField(superclass=ModelFieldSerializer,
+                                    blank=True, null=True)
+
+    @property
+    def serializer(self):
+        if self.serializer_name:
+            return get_class_by_dotted_name(self.serializer_name)
+        else:
+            return ModelFieldSerializer
 
     def __unicode__(self):
         return self.field
