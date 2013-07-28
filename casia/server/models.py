@@ -136,6 +136,7 @@ class FieldPermission(models.Model):
     field = models.CharField(max_length=255, primary_key=True)
     serializer_name = SubclassField(superclass=ModelFieldSerializer,
                                     blank=True, null=True)
+    position = models.PositiveSmallIntegerField()
 
     @property
     def serializer(self):
@@ -146,6 +147,9 @@ class FieldPermission(models.Model):
 
     def __unicode__(self):
         return self.field
+
+    class Meta:
+        ordering = ['position']
 
 
 @receiver(post_delete, sender=ServiceTicket)
