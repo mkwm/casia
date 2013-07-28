@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'grappelli',
     'django.contrib.admin',
     'south',
     'casia.server',
@@ -66,3 +67,5 @@ LOGIN_REDIRECT_URL = 'index'
 
 POLICY_NETLOC_COMPONENTS = 5
 POLICY_PATH_COMPONENTS = 5
+
+GRAPPELLI_ADMIN_TITLE = 'Casia'
