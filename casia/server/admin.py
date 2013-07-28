@@ -19,12 +19,13 @@ from casia.server.models import (ServiceTicket, ServicePolicy,
 
 
 class ServiceTicketAdmin(admin.ModelAdmin):
-    list_display = ('ticket', 'created_at', 'is_consumable')
+    list_display = ('ticket', 'user', 'url', 'pgt', 'created_at',
+                    'renewed', 'is_consumable')
 
 
 class ServicePolicyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'scheme', 'netloc', 'path', 'priority',
-                    'is_active')
+    list_display = ('__unicode__', 'name', 'owner', 'is_active', 'is_trusted',
+                    'allow_proxy', 'allow_single_login', 'allow_single_logout')
 
 
 class ProxyGrantingTicketAdmin(admin.ModelAdmin):

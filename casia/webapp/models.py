@@ -28,3 +28,6 @@ class TicketRequest(models.Model):
     url = models.TextField()
     policy = models.ForeignKey(ServicePolicy)
     renewed = models.BooleanField()
+
+    def __unicode__(self):
+        return self.url

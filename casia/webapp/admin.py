@@ -17,4 +17,8 @@ from django.contrib import admin
 from casia.webapp.models import TicketRequest
 
 
-admin.site.register(TicketRequest)
+class TicketRequestAdmin(admin.ModelAdmin):
+    list_display = ('id', 'url', 'user', 'session')
+
+
+admin.site.register(TicketRequest, TicketRequestAdmin)

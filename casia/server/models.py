@@ -117,6 +117,9 @@ class ServicePolicy(models.Model):
             self.priority = priority
         super(ServicePolicy, self).save(*args, **kwargs)
 
+    def __unicode__(self):
+        return self.scheme + '://' + self.netloc + self.path
+
 
 class ProxyGrantingTicket(AbstractTicket):
     objects = ProxyGrantingTicketManager()
