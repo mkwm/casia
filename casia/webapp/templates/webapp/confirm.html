@@ -21,7 +21,7 @@
 <p class="text-info"><i class="icon-eye-open"></i> Service will receive details from user profile</p>
 <table class="table table-profile">
 {% for key, value in profile.items %}
-  <tr><th>{{ key|capfirst }}</th><td>{{ value }}</td></tr>
+  <tr><th>{{ key|capfirst }}</th><td>{{ value|safe }}</td></tr>
 {% endfor %}
 </table>
 {% else %}

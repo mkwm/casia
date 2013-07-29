@@ -29,3 +29,7 @@ body {
   text-align: left;
   width: 50%;
 }
+
+.table-profile td ul, .table-profile td ol {
+  margin-bottom: 0px;
+}

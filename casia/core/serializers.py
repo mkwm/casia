@@ -14,13 +14,16 @@
 
 from xml.etree.ElementTree import Element
 
+from django.template.defaultfilters import unordered_list
+from django.utils.html import escape
+
 from casia.core.utils import get_subclasses
 
 
 class ModelFieldSerializer(object):
     @classmethod
     def to_html(cls, obj, attr):
-        return '%s' % getattr(obj, attr)
+        return escape('%s' % getattr(obj, attr))
 
     @classmethod
     def to_xml(cls, obj, attr):
@@ -47,7 +50,7 @@ class BooleanFieldSerializer(ModelFieldSerializer):
 class DateTimeFieldSerializer(ModelFieldSerializer):
     @classmethod
     def to_html(cls, obj, attr):
-        return getattr(obj, attr)
+        return escape(getattr(obj, attr))
 
     @classmethod
     def to_xml(cls, obj, attr):
@@ -59,7 +62,7 @@ class DateTimeFieldSerializer(ModelFieldSerializer):
 class RelatedFieldSerializer(ModelFieldSerializer):
     @classmethod
     def to_html(cls, obj, attr):
-        return '(many objects)'
+        return '<ul>%s</ul>' % unordered_list(getattr(obj, attr).all(), escape)
 
     @classmethod
     def to_xml(cls, obj, attr):
