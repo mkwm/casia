@@ -30,6 +30,9 @@ Now, create Django database tables:
 And then apply Casia South migrations:
 ``python manage.py migrate``
 
+Also, you should also prepopulate profile fields tables in database
+``python manage.py updatefields``
+
 Known issues
 ------------
 

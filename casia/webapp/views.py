@@ -21,6 +21,7 @@ from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
+from django.utils.datastructures import SortedDict
 from django.views.decorators.debug import sensitive_post_parameters
 
 from casia.server.models import ServicePolicy
@@ -94,7 +95,17 @@ def cas_issue(request, ticket_request_uuid):
         if 'continue' in request.POST:
             return issue_service_ticket(ticket_request)
         else:
+            fields = ticket_request.policy.field_permissions.all()
+            profile = SortedDict()
+            for f in fields:
+                try:
+                    key = ticket_request.user._meta.get_field_by_name(f.field)[0].verbose_name
+                    profile[key] = f.serializer.to_html(ticket_request.user, f.field)
+                except AttributeError:
+                    # TODO: Should it be ignored?
+                    pass
             context = {'ticket_request': ticket_request,
+                       'profile': profile,
                        'abort_url':
                        update_url(ticket_request.url,
                            {'ticket': 'ST-AuthenticationAbortedByUser'})}

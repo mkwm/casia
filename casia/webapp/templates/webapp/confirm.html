@@ -16,6 +16,18 @@
 {% else %}
 <p class="text-warning"><i class="icon-warning-sign"></i> {% blocktrans %}Service is operated by unknown provider &ndash; <strong>be careful!</strong>{% endblocktrans %}</p>
 {% endif %}
+{% if not ticket_request.policy.is_trusted %}
+{% if profile.items %}
+<p class="text-info"><i class="icon-eye-open"></i> Service will receive details from user profile</p>
+<table class="table table-profile">
+{% for key, value in profile.items %}
+  <tr><th>{{ key|capfirst }}</th><td>{{ value|safe }}</td></tr>
+{% endfor %}
+</table>
+{% else %}
+<p class="text-error"><i class="icon-eye-close"></i> Service will not receive details from user profile</p>
+{% endif %}
+{% endif %}
 <form action="{{ app_path }}" method="post">{% csrf_token %}
   <fieldset>
     <div class="form-actions">

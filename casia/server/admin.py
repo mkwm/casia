@@ -14,7 +14,7 @@
 
 from django.contrib import admin
 
-from casia.server.models import (ServiceTicket, ServicePolicy,
+from casia.server.models import (FieldPermission, ServiceTicket, ServicePolicy,
                                  ProxyGrantingTicket)
 
 
@@ -26,12 +26,14 @@ class ServiceTicketAdmin(admin.ModelAdmin):
 class ServicePolicyAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'name', 'owner', 'is_active', 'is_trusted',
                     'allow_proxy', 'allow_single_login', 'allow_single_logout')
+    filter_horizontal = ('field_permissions', )
 
 
 class ProxyGrantingTicketAdmin(admin.ModelAdmin):
     list_display = ('ticket', 'iou', 'url', 'st')
 
 
+admin.site.register(FieldPermission)
 admin.site.register(ServiceTicket, ServiceTicketAdmin)
 admin.site.register(ServicePolicy, ServicePolicyAdmin)
 admin.site.register(ProxyGrantingTicket, ProxyGrantingTicketAdmin)
