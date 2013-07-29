@@ -37,7 +37,8 @@ class Command(BaseCommand):
         print 'Fields to create in database:'
         for i in to_create:
             print '-', i
-        bulk_create = [FieldPermission(field=field) for field in to_create]
+        bulk_create = [FieldPermission(field=field,
+                                       position=0) for field in to_create]
         FieldPermission.objects.bulk_create(bulk_create)
 
         print
