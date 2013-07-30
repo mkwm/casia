@@ -12,6 +12,9 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from django.contrib.admin.util import label_for_field
+
+
 class ProfileGenerator(object):
     def __init__(self, user, fields):
         self.user = user
@@ -20,7 +23,7 @@ class ProfileGenerator(object):
     def items(self):
         for f in self.fields:
             try:
-                key = self.user._meta.get_field_by_name(f.field)[0].verbose_name
+                key = label_for_field(f.field, self.user)
                 value = f.serializer.to_html(self.user, f.field)
                 yield key, value
             except AttributeError:
