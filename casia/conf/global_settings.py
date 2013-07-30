@@ -13,9 +13,11 @@
 
 
 from datetime import timedelta
+import os
 
 from django.contrib.messages import constants as message
 
+import casia
 
 # Default Casia settings. Override these with settings in the module
 # pointed-to by the DJANGO_SETTINGS_MODULE environment variable.
@@ -44,6 +46,7 @@ INSTALLED_APPS = (
     'grappelli',
     'django.contrib.admin',
     'south',
+    'casia.locale',
     'casia.server',
     'casia.assets.bootstrap',
     'casia.assets.font_awesome',
@@ -70,3 +73,5 @@ POLICY_PATH_COMPONENTS = 5
 
 USER_MODEL_PROTECTED_FIELDS = ('id', 'password', 'pk')
 GRAPPELLI_ADMIN_TITLE = 'Casia'
+
+LOCALE_PATHS = [os.path.join(os.path.dirname(casia.__file__), 'locale')]
