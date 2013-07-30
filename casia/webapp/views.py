@@ -21,13 +21,13 @@ from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.utils.datastructures import SortedDict
 from django.views.decorators.debug import sensitive_post_parameters
 
 from casia.server.models import ServicePolicy
 from casia.server.utils import issue_service_ticket, update_url
 from casia.webapp.forms import AuthenticationForm, ReauthenticationFormWrapper
 from casia.webapp.models import TicketRequest
+from casia.webapp.utils import ProfileGenerator
 
 
 @login_required
@@ -96,14 +96,8 @@ def cas_issue(request, ticket_request_uuid):
             return issue_service_ticket(ticket_request)
         else:
             fields = ticket_request.policy.field_permissions.all()
-            profile = SortedDict()
-            for f in fields:
-                try:
-                    key = ticket_request.user._meta.get_field_by_name(f.field)[0].verbose_name
-                    profile[key] = f.serializer.to_html(ticket_request.user, f.field)
-                except AttributeError:
-                    # TODO: Should it be ignored?
-                    pass
+            profile = ProfileGenerator(ticket_request.user, fields)
+
             context = {'ticket_request': ticket_request,
                        'profile': profile,
                        'abort_url':
