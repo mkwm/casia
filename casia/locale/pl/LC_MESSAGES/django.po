@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Casia\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-26 21:05+0200\n"
-"PO-Revision-Date: 2013-07-26 20:49+0200\n"
+"POT-Creation-Date: 2013-07-30 11:44+0200\n"
+"PO-Revision-Date: 2013-07-30 11:45+0200\n"
 "Last-Translator: Mateusz Małek <mkwm@mkwm.eu.org>\n"
 "Language-Team: Mateusz Małek <mkwm@mkwm.eu.org>\n"
 "Language: pl\n"
@@ -21,80 +21,107 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: templates/webapp/base.html:31
+#: core/serializers.py:37
+msgid "true"
+msgstr "prawda"
+
+#: core/serializers.py:38
+msgid "false"
+msgstr "fałsz"
+
+#: webapp/views.py:55
+msgid "You have been logged out successfully."
+msgstr "Zostałeś wylogowany pomyślnie."
+
+#: webapp/views.py:57
+msgid "You have to be logged in to log out. Please log in to log out."
+msgstr ""
+"Musisz być zalogowany aby się wylogować. Zaloguj się aby się wylogować."
+
+#: webapp/templates/webapp/base.html:31
 msgid "Admin site"
 msgstr "Panel administracyjny"
 
-#: templates/webapp/base.html:33
+#: webapp/templates/webapp/base.html:33
 msgid "Change password"
 msgstr "Zmień hasło"
 
-#: templates/webapp/base.html:35
+#: webapp/templates/webapp/base.html:35
 msgid "Log out"
 msgstr "Wyloguj"
 
-#: templates/webapp/confirm.html:4
+#: webapp/templates/webapp/confirm.html:4
 msgid "Confirmation"
 msgstr "Potwierdzenie"
 
-#: templates/webapp/confirm.html:6
+#: webapp/templates/webapp/confirm.html:6
+#, python-format
 msgid "Authentication to <strong>%(name)s</strong> requires your consent"
 msgstr "Uwierzytelnienie do <strong>%(name)s</strong> wymaga twojej zgody"
 
-#: templates/webapp/confirm.html:8
+#: webapp/templates/webapp/confirm.html:8
+#, python-format
 msgid ""
 "Authentication to service at <strong>%(url)s</strong> requires your consent"
 msgstr ""
 "Uwierzytelnienie do usługi pod adresem <strong>%(url)s</strong> wymaga "
 "twojej zgody"
 
-#: templates/webapp/confirm.html:12
+#: webapp/templates/webapp/confirm.html:12
 #, python-format
 msgid "Service is operated by <strong>%(owner)s</strong> (trusted provider)"
 msgstr ""
 "Usługa jest obsługiwana przez <strong>%(owner)s</strong> (zaufany dostawca)"
 
-#: templates/webapp/confirm.html:14
+#: webapp/templates/webapp/confirm.html:14
 #, python-format
 msgid "Service is operated by <strong>%(owner)s</strong>"
 msgstr "Usługa jest obsługiwana przez <strong>%(owner)s</strong>"
 
-#: templates/webapp/confirm.html:17
+#: webapp/templates/webapp/confirm.html:17
 msgid ""
 "Service is operated by unknown provider &ndash; <strong>be careful!</strong>"
 msgstr ""
 "Usługa jest obsługiwana przez nieznanego dostawcę &ndash; <strong>zachowaj "
 "ostrożność!</strong>"
 
-#: templates/webapp/confirm.html:22
+#: webapp/templates/webapp/confirm.html:21
+msgid "Service will receive details from user profile"
+msgstr "Usługa otrzyma dane z profilu użytkownika"
+
+#: webapp/templates/webapp/confirm.html:28
+msgid "Service will not receive details from user profile"
+msgstr "Usługa nie otrzyma danych z profilu użytkownika"
+
+#: webapp/templates/webapp/confirm.html:34
 msgid "Continue"
 msgstr "Kontynuuj"
 
-#: templates/webapp/confirm.html:23
+#: webapp/templates/webapp/confirm.html:35
 msgid "Abort"
 msgstr "Przerwij"
 
-#: templates/webapp/logged_in.html:4
+#: webapp/templates/webapp/logged_in.html:4
 msgid "Logged in"
 msgstr "Zalogowany"
 
-#: templates/webapp/logged_in.html:5
+#: webapp/templates/webapp/logged_in.html:5
 msgid "You are logged into Casia"
 msgstr "Jesteś zalogowany w Casia"
 
-#: templates/webapp/logged_in.html:6
+#: webapp/templates/webapp/logged_in.html:6
 msgid "Authentication to services would be performed automatically"
 msgstr "Uwierzytelnianie do usług będzie wykonywane automatyczne"
 
-#: templates/webapp/login_form.html:30
+#: webapp/templates/webapp/login_form.html:30
 msgid "Log in"
 msgstr "Zaloguj"
 
-#: templates/webapp/login_form.html:33
+#: webapp/templates/webapp/login_form.html:33
 msgid "Security warning"
 msgstr "Ostrzeżenie bezpieczeństwa"
 
-#: templates/webapp/login_form.html:34
+#: webapp/templates/webapp/login_form.html:34
 msgid ""
 "Always check the address bar when logging in to Casia. Do not trust other "
 "sites with your password!"
@@ -102,22 +129,22 @@ msgstr ""
 "Zawsze sprawdzaj pasek adresu przed zalogowaniem się do Casia. Nie podawaj "
 "swojego hasła na innych stronach!"
 
-#: templates/webapp/relogin.html:4
+#: webapp/templates/webapp/relogin.html:4
 msgid "Reauthentication"
 msgstr "Ponowne uwierzytelnienie"
 
-#: templates/webapp/relogin.html:5
+#: webapp/templates/webapp/relogin.html:5
 msgid "Renew your credentials for security reasons"
 msgstr "Ze względów bezpieczeństwa zaloguj się ponownie"
 
-#: templates/webapp/unknown.html:4
+#: webapp/templates/webapp/unknown.html:4
 msgid "Unknown service"
 msgstr "Nieznana usługa"
 
-#: templates/webapp/unknown.html:5
+#: webapp/templates/webapp/unknown.html:5
 msgid "Authentication aborted due to security reasons"
 msgstr "Uwierzytelnianie przerwane ze względów bezpieczeństwa"
 
-#: templates/webapp/unknown.html:6
+#: webapp/templates/webapp/unknown.html:6
 msgid "Service is not known to Casia"
 msgstr "Usługa nie jest znana w Casia"
