@@ -21,6 +21,7 @@ from django.core.urlresolvers import resolve, reverse
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.debug import sensitive_post_parameters
 
 from casia.server.models import ServicePolicy
@@ -51,10 +52,10 @@ def login(request):
 def logout(request):
     if request.user.is_authenticated():
         auth_logout(request)
-        messages.success(request, 'You have been logged out successfully.')
+        messages.success(request, _('You have been logged out successfully.'))
     else:
-        messages.error(request, 'You have to be logged in to log out. '
-                       'Please log in to log out.')
+        messages.error(request, _('You have to be logged in to log out. '
+                       'Please log in to log out.'))
     return redirect('login')
 
 

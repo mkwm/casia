@@ -18,14 +18,14 @@
 {% endif %}
 {% if not ticket_request.policy.is_trusted %}
 {% if profile.items %}
-<p class="text-info"><i class="icon-eye-open"></i> Service will receive details from user profile</p>
+<p class="text-info"><i class="icon-eye-open"></i> {% blocktrans %}Service will receive details from user profile{% endblocktrans %}</p>
 <table class="table table-profile">
 {% for key, value in profile.items %}
   <tr><th>{{ key|capfirst }}</th><td>{{ value|safe }}</td></tr>
 {% endfor %}
 </table>
 {% else %}
-<p class="text-error"><i class="icon-eye-close"></i> Service will not receive details from user profile</p>
+<p class="text-error"><i class="icon-eye-close"></i> {% blocktrans %}Service will not receive details from user profile{% endblocktrans %}</p>
 {% endif %}
 {% endif %}
 <form action="{{ app_path }}" method="post">{% csrf_token %}

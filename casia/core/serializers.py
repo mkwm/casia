@@ -16,6 +16,7 @@ from xml.etree.ElementTree import Element
 
 from django.template.defaultfilters import unordered_list
 from django.utils.html import escape
+from django.utils.translation import ugettext_lazy as _
 
 from casia.core.utils import get_subclasses
 
@@ -33,8 +34,8 @@ class ModelFieldSerializer(object):
 
 
 class BooleanFieldSerializer(ModelFieldSerializer):
-    TRUE = 'true'
-    FALSE = 'false'
+    TRUE = _('true')
+    FALSE = _('false')
 
     @classmethod
     def to_html(cls, obj, attr):
