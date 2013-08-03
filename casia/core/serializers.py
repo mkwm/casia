@@ -18,18 +18,18 @@ from django.template.defaultfilters import unordered_list
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
-from casia.core.utils import get_subclasses
+from casia.core.utils import get_subclasses, get_field_value
 
 
 class ModelFieldSerializer(object):
     @classmethod
     def to_html(cls, obj, attr):
-        return escape('%s' % getattr(obj, attr))
+        return escape('%s' % get_field_value(field, obj))
 
     @classmethod
     def to_xml(cls, obj, attr):
         e = Element('cas:' + attr, attrib={'type': 'string'})
-        e.text = '%s' % getattr(obj, attr)
+        e.text = '%s' % get_field_value(field, obj)
         return [e]
 
 
@@ -39,36 +39,37 @@ class BooleanFieldSerializer(ModelFieldSerializer):
 
     @classmethod
     def to_html(cls, obj, attr):
-        return cls.TRUE if getattr(obj, attr) else cls.FALSE
+        return cls.TRUE if get_field_value(field, obj) else cls.FALSE
 
     @classmethod
     def to_xml(cls, obj, attr):
         e = Element('cas:' + attr, attrib={'type': 'boolean'})
-        e.text = 'true' if getattr(obj, attr) else 'false'
+        e.text = 'true' if get_field_value(field, obj) else 'false'
         return [e]
 
 
 class DateTimeFieldSerializer(ModelFieldSerializer):
     @classmethod
     def to_html(cls, obj, attr):
-        return escape(getattr(obj, attr))
+        return escape(get_field_value(field, obj))
 
     @classmethod
     def to_xml(cls, obj, attr):
         e = Element('cas:' + attr, attrib={'type': 'dateTime'})
-        e.text = getattr(obj, attr).isoformat()
+        e.text = get_field_value(field, obj).isoformat()
         return [e]
 
 
 class RelatedFieldSerializer(ModelFieldSerializer):
     @classmethod
     def to_html(cls, obj, attr):
-        return '<ul>%s</ul>' % unordered_list(getattr(obj, attr).all(), escape)
+        return '<ul>%s</ul>' % unordered_list(get_field_value(field, obj).all(),
+                                              escape)
 
     @classmethod
     def to_xml(cls, obj, attr):
         elements = []
-        for i in getattr(obj, attr).all():
+        for i in get_field_value(field, obj).all():
             e = Element('cas:' + attr, attrib={'type': 'string'})
             e.text = '%s' % i
             elements.append(e)

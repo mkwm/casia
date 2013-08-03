@@ -12,6 +12,9 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
+from django.contrib.admin import lookup_field
+
+
 def get_subclasses(cls):
     subclasses = []
 
@@ -28,3 +31,9 @@ def get_class_by_dotted_name(name):
         return getattr(__import__(module, fromlist=[obj]), obj)
     except:
         raise ImportError
+
+
+def get_field_value(field, obj):
+    f, attr, value = lookup_field(field, obj)
+    return value
+
