@@ -12,7 +12,7 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.contrib.admin import lookup_field
+from django.contrib.admin.util import lookup_field
 
 
 def get_subclasses(cls):
