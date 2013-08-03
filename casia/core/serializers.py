@@ -23,12 +23,12 @@ from casia.core.utils import get_subclasses, get_field_value
 
 class ModelFieldSerializer(object):
     @classmethod
-    def to_html(cls, obj, attr):
+    def to_html(cls, obj, field):
         return escape('%s' % get_field_value(field, obj))
 
     @classmethod
-    def to_xml(cls, obj, attr):
-        e = Element('cas:' + attr, attrib={'type': 'string'})
+    def to_xml(cls, obj, field):
+        e = Element('cas:' + field, attrib={'type': 'string'})
         e.text = '%s' % get_field_value(field, obj)
         return [e]
 
@@ -38,39 +38,39 @@ class BooleanFieldSerializer(ModelFieldSerializer):
     FALSE = _('false')
 
     @classmethod
-    def to_html(cls, obj, attr):
+    def to_html(cls, obj, field):
         return cls.TRUE if get_field_value(field, obj) else cls.FALSE
 
     @classmethod
-    def to_xml(cls, obj, attr):
-        e = Element('cas:' + attr, attrib={'type': 'boolean'})
+    def to_xml(cls, obj, field):
+        e = Element('cas:' + field, attrib={'type': 'boolean'})
         e.text = 'true' if get_field_value(field, obj) else 'false'
         return [e]
 
 
 class DateTimeFieldSerializer(ModelFieldSerializer):
     @classmethod
-    def to_html(cls, obj, attr):
+    def to_html(cls, obj, field):
         return escape(get_field_value(field, obj))
 
     @classmethod
-    def to_xml(cls, obj, attr):
-        e = Element('cas:' + attr, attrib={'type': 'dateTime'})
+    def to_xml(cls, obj, field):
+        e = Element('cas:' + field, attrib={'type': 'dateTime'})
         e.text = get_field_value(field, obj).isoformat()
         return [e]
 
 
 class RelatedFieldSerializer(ModelFieldSerializer):
     @classmethod
-    def to_html(cls, obj, attr):
+    def to_html(cls, obj, field):
         return '<ul>%s</ul>' % unordered_list(get_field_value(field, obj).all(),
                                               escape)
 
     @classmethod
-    def to_xml(cls, obj, attr):
+    def to_xml(cls, obj, field):
         elements = []
         for i in get_field_value(field, obj).all():
-            e = Element('cas:' + attr, attrib={'type': 'string'})
+            e = Element('cas:' + field, attrib={'type': 'string'})
             e.text = '%s' % i
             elements.append(e)
         return elements
