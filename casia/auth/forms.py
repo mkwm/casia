@@ -25,7 +25,7 @@ AuthenticationForm.helper.layout = Layout(
     PrependedText('username', '<span class="icon-fixed-width icon-user"></span>'),
     PrependedText('password', '<span class="icon-fixed-width icon-key"></span>'),
     Div(
-        Submit('sign-in', 'Sign in', css_class='btn-lg'),
+        Submit('log-in', 'Log in', css_class='btn-lg'),
         css_class='text-center'
     ),
 )
