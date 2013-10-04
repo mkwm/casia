@@ -17,8 +17,10 @@
 TIME_ZONE = 'UTC'
 
 MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'casia.conf.urls'
@@ -26,7 +28,11 @@ ROOT_URLCONF = 'casia.conf.urls'
 WSGI_APPLICATION = 'casia.core.wsgi.application'
 
 INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'casia.assets.bootstrap',
     'casia.assets.fontawesome',
     'casia.assets.html5shiv',
@@ -34,3 +40,5 @@ INSTALLED_APPS = (
     'casia.assets.respondjs',
     'casia.webapp',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
