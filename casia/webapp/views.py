@@ -43,5 +43,8 @@ def login(request):
                         extra_context=context)
 
 def logout(request):
-    messages.success(request, 'You have been logged out successfully')
+    if request.user.is_authenticated():
+        messages.success(request, 'You have been logged out successfully')
+    else:
+        messages.error(request, 'You were not logged in')
     return django_logout_then_login(request)

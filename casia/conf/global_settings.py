@@ -56,7 +56,7 @@ MESSAGE_TAGS = {
     message.INFO: 'alert-info',
     message.SUCCESS: 'alert-success',
     message.WARNING: 'alert-warning',
-    message.ERROR: 'alert-error',
+    message.ERROR: 'alert-danger',
 }
 
 SITE_ID = 1
