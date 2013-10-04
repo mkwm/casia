@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import (
     login as django_login, logout_then_login as django_logout_then_login
 )
+from django.contrib.sites.models import get_current_site
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
@@ -23,13 +24,23 @@ from casia.auth.forms import AuthenticationForm
 
 @login_required
 def index(request):
-    return TemplateResponse(request, 'webapp/index.html')
+    current_site = get_current_site(request)
+    context = {
+        'site': current_site,
+        'site_name': current_site.name,
+        'title': 'Logged in'
+    }
+    return TemplateResponse(request, 'webapp/index.html', context)
 
 def login(request):
     if request.user.is_authenticated():
         return redirect('index')
+    context = {
+        'title': 'Log in'
+    }
     return django_login(request, template_name='webapp/login.html',
-                        authentication_form=AuthenticationForm)
+                        authentication_form=AuthenticationForm,
+                        extra_context=context)
 
 def logout(request):
     messages.success(request, 'You have been logged out successfully')
