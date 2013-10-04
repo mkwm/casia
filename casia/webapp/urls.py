@@ -15,5 +15,4 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     url(r'^$', 'casia.webapp.views.index', name='index'),
-    url(r'^login$', 'casia.webapp.views.login', name='login'),
 )
