@@ -14,6 +14,8 @@
 # Default Casia settings. Override these with settings in the module
 # pointed-to by the DJANGO_SETTINGS_MODULE environment variable.
 
+from django.contrib.messages import constants as message
+
 TIME_ZONE = 'UTC'
 
 MIDDLEWARE_CLASSES = (
@@ -21,6 +23,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'casia.conf.urls'
@@ -31,6 +34,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
     'casia.assets.bootstrap',
@@ -42,3 +46,14 @@ INSTALLED_APPS = (
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
+MESSAGE_TAGS = {
+    message.INFO: 'alert-info',
+    message.SUCCESS: 'alert-success',
+    message.WARNING: 'alert-warning',
+    message.ERROR: 'alert-error',
+}

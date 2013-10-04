@@ -11,12 +11,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.contrib.auth.views import login as django_login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import (
+    login as django_login, logout_then_login as django_logout_then_login
+)
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
 from casia.auth.forms import AuthenticationForm
 
+@login_required
 def index(request):
     return TemplateResponse(request, 'webapp/index.html')
 
@@ -25,3 +30,7 @@ def login(request):
         return redirect('index')
     return django_login(request, template_name='webapp/login.html',
                         authentication_form=AuthenticationForm)
+
+def logout(request):
+    messages.success(request, 'You have been logged out successfully')
+    return django_logout_then_login(request)

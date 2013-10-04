@@ -35,7 +35,7 @@
                 <li><a href="#"><span class="icon-fixed-width icon-star"></span> Manage site</a></li>
 {% endif %}
                 <li><a href="#"><span class="icon-fixed-width icon-key"></span> Change password</a></li>
-                <li><a href="#"><span class="icon-fixed-width icon-signout"></span> Sign out</a></li>
+                <li><a href="{% url 'logout' %}"><span class="icon-fixed-width icon-signout"></span> Sign out</a></li>
               </ul>
             </li>
 	      </ul>
@@ -48,6 +48,12 @@
       </div>
     </div>
     <div class="container">
+{% for message in messages %}
+      <div class="alert alert-dismissable{% if message.tags %} {{ message.tags }}{% endif %}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ message }}
+      </div>
+{% endfor %}
 {% block content %}{% endblock %}
     </div>
     <script src="{% static 'js/jquery.min.js' %}"></script>

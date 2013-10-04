@@ -15,5 +15,6 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     url(r'^$', 'casia.webapp.views.index', name='index'),
-    url(r'^accounts/login/$', 'casia.webapp.views.login', name='login'),
+    url(r'^login$', 'casia.webapp.views.login', name='login'),
+    url(r'^logout$', 'casia.webapp.views.logout', name='logout'),
 )
