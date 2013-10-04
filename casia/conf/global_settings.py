@@ -24,3 +24,13 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'casia.conf.urls'
 
 WSGI_APPLICATION = 'casia.core.wsgi.application'
+
+INSTALLED_APPS = (
+    'django.contrib.staticfiles',
+    'casia.assets.bootstrap',
+    'casia.assets.fontawesome',
+    'casia.assets.html5shiv',
+    'casia.assets.jquery',
+    'casia.assets.respondjs',
+    'casia.webapp',
+)

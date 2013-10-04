@@ -11,11 +11,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import patterns
+from django.template.response import TemplateResponse
 
-from casia.webapp.urls import urlpatterns as webapp_urlpatterns
-
-urlpatterns = patterns('',
-)
-
-urlpatterns += webapp_urlpatterns
+def index(request):
+    return TemplateResponse(request, 'webapp/index.html')

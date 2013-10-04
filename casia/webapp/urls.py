@@ -11,11 +11,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import patterns
-
-from casia.webapp.urls import urlpatterns as webapp_urlpatterns
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
+    url(r'^$', 'casia.webapp.views.index', name='index'),
+    url(r'^login$', 'casia.webapp.views.login', name='login'),
 )
-
-urlpatterns += webapp_urlpatterns
