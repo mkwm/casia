@@ -38,7 +38,7 @@ class ServiceTicketManager(ConsumableManager):
 
         if st.url != service:
             raise InvalidService("Ticket '%s' does not match supplied service "
-                                 "- the original service was '%s' and the"
+                                 "- the original service was '%s' and the "
                                  "supplied service was '%s'" %
                                  (st, st.url, service))
 

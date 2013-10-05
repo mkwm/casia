@@ -11,9 +11,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import patterns, url
+from xml.etree.ElementTree import tostring
 
-urlpatterns = patterns('',
-    url(r'^validate$', 'casia.cas.views.validate', name='cas_validate'),
-    url(r'^serviceValidate$', 'casia.cas.views.service_validate', name='cas_service_validate'),
-)
+from django.http.response import HttpResponse
+
+class XMLResponse(HttpResponse):
+    def __init__(self, obj):
+        content = tostring(obj)
+        super(XMLResponse, self).__init__(content,
+                                          content_type='application/xhtml+xml')
