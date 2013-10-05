@@ -24,6 +24,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 
 from casia.cas.exceptions import Error
+from casia.cas.forms import LoginConfirmationForm
 from casia.cas.models import ProxyGrantingTicket, Service, TicketRequest
 from casia.cas.utils import (validate_ticket, issue_proxy_ticket,
                              issue_service_ticket)
@@ -99,9 +100,22 @@ def login(request):
         return redirect('index')
 
 def issue(request, ticket_request_id):
+    current_site = get_current_site(request)
+    context = {
+        'site': current_site,
+        'site_name': current_site.name,
+        'title': 'Confirmation'
+    }
     ticket_request = get_object_or_404(TicketRequest, id=ticket_request_id)
     if ticket_request.user:
-        return issue_service_ticket(ticket_request)
+        if ticket_request.service.is_trusted or 'continue' in request.POST:
+            return issue_service_ticket(ticket_request)
+        elif 'abort' in request.POST:
+            return redirect('index')
+        else:
+            form = LoginConfirmationForm()
+            context.update({'form': form, 'service': ticket_request.service})
+            return TemplateResponse(request, 'cas/confirm.html', context)
     else:
         target = reverse('cas_issue',
                          kwargs={'ticket_request_id': ticket_request.id})

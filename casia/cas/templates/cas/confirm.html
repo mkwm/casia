@@ -1,0 +1,9 @@
+{% extends 'webapp/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="page-header text-center">
+  <h1>Confirmation</h1>
+</div>
+<p class="lead text-center">Authentication to <strong>{{ service }}</strong> requires your consent</p>
+{% crispy form %}
+{% endblock %}
