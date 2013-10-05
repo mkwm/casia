@@ -27,12 +27,13 @@ def validate_ticket(request):
 
     service = request.GET.get('service')
     ticket = request.GET.get('ticket')
+    renew = 'renew' in request.GET
 
     if not service or not ticket:
         raise InvalidRequest("'service' and 'ticket' parameters are both "
                              "required.")
 
-    return ServiceTicket.consumable.validate(service, ticket)
+    return ServiceTicket.consumable.validate(service, ticket, renew)
 
 def update_url(url, url_vars):
     url_parts = list(urlparse(url))
@@ -47,7 +48,8 @@ def issue_service_ticket(ticket_request):
     st = ServiceTicket(user=ticket_request.user,
                        session=ticket_request.session,
                        url=ticket_request.url,
-                       service=ticket_request.service)
+                       service=ticket_request.service,
+                       renewed=ticket_request.renewed)
     st.save()
 
     target = update_url(ticket_request.url, {'ticket': st.ticket})

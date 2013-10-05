@@ -34,7 +34,7 @@ class ConsumableManager(models.Manager):
         return obj
 
 class ServiceTicketManager(ConsumableManager):
-    def validate(self, service, ticket):
+    def validate(self, service, ticket, renew):
         try:
             st = self.get_and_consume(ticket=ticket)
         except self.model.DoesNotExist:
@@ -45,6 +45,12 @@ class ServiceTicketManager(ConsumableManager):
                                  "- the original service was '%s' and the "
                                  "supplied service was '%s'" %
                                  (st, st.url, service))
+
+        if renew and not st.renewed:
+            raise InvalidTicket("Ticket '%s' does not match validation "
+                                "specification - was issued from single "
+                                "sign on session, but renew was requested." %
+                                ticket)
 
         return st
 

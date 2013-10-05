@@ -20,8 +20,9 @@ from django.contrib.auth.views import (
 from django.contrib.sites.models import get_current_site
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
 from django.template.response import TemplateResponse
+
+from casia.auth.forms import AuthenticationForm, ReauthenticationFormWrapper
 
 @login_required
 def index(request):
@@ -34,13 +35,19 @@ def index(request):
     return TemplateResponse(request, 'webapp/index.html', context)
 
 def login(request):
-    if request.user.is_authenticated():
-        print dir(request.user)
-        return redirect('index')
-    context = {
-        'title': 'Log in'
-    }
-    return django_login(request, template_name='webapp/login.html',
+    if not request.user.is_authenticated():
+        template_name = 'webapp/login.html'
+        form = AuthenticationForm
+        context = {
+            'title': 'Log in'
+        }
+    else:
+        template_name = 'webapp/relogin.html'
+        form = ReauthenticationFormWrapper(user=request.user)
+        context = {
+            'title': 'Log in again'
+        }
+    return django_login(request, template_name, authentication_form=form,
                         extra_context=context)
 
 def logout(request):

@@ -44,3 +44,24 @@ PasswordChangeForm.helper.layout = Layout(
         css_class='col-sm-offset-2 col-sm-8',
     ),
 )
+
+class ReauthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        if ('data' in kwargs and
+            kwargs['data']['username'] != kwargs['initial']['username']):
+            kwargs['data'] = kwargs.get('data', {}).copy()
+            kwargs['data']['username'] = kwargs['initial']['username']
+        super(ReauthenticationForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['readonly'] = 'readonly'
+
+    def clean_username(self):
+        return self.initial['username']
+
+class ReauthenticationFormWrapper(object):
+    def __init__(self, user):
+        self.username = user.get_username()
+
+    def __call__(self, *args, **kwargs):
+        kwargs['initial'] = kwargs.get('initial', {})
+        kwargs['initial']['username'] = self.username
+        return ReauthenticationForm(*args, **kwargs)

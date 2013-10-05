@@ -65,11 +65,13 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     # For that reasons, its safer to use TextField insted of CharField
     url = models.TextField()
     service = models.ForeignKey('Service')
+    renewed = models.BooleanField()
 
 class TicketRequest(models.Model):
     id = UUIDField(auto=True, primary_key=True)
     url = models.TextField()
     service = models.ForeignKey('Service')
+    renewed = models.BooleanField()
     session = models.ForeignKey(Session, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
 

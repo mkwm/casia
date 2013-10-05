@@ -59,6 +59,7 @@ def login(request):
     }
     ticket_request = TicketRequest()
     ticket_request.url = request.GET.get('service')
+    ticket_request.renewed = 'renew' in request.GET
     if ticket_request.url:
         try:
             service = Service.objects.get_by_url(ticket_request.url)
@@ -67,7 +68,10 @@ def login(request):
                 return TemplateResponse(request, 'cas/security_error.html',
                                         context)
             ticket_request.service = service
-            if request.user.is_authenticated():
+            if not request.user.is_authenticated() or 'renew' in request.GET:
+                if 'gateway' in request.GET:
+                    return redirect(ticket_request.url)
+            else:
                 ticket_request.session_id = request.session.session_key
                 ticket_request.user = request.user
             ticket_request.save()
