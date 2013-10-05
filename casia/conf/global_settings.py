@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'casia.auth',
     'casia.assets.bootstrap',
     'casia.assets.fontawesome',
     'casia.assets.html5shiv',

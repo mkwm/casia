@@ -23,9 +23,6 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
-# Monkey patch authentication and password change forms
-import casia.auth.forms
-
 @login_required
 def index(request):
     current_site = get_current_site(request)
