@@ -129,5 +129,5 @@ class ProxyGrantingTicketManager(models.Manager):
                     if r.status_code in (200, 301, 302):
                         pgt.save()
                 except RequestException:
-                    pass
+                    pgt = None
         return pgt
