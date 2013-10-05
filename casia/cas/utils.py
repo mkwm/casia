@@ -11,6 +11,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
+from urlparse import urlparse, urlunparse
+
+from django.http import HttpResponseRedirect, QueryDict
 from django.utils.crypto import get_random_string
 
 from casia.cas.exceptions import InvalidRequest
@@ -29,3 +32,23 @@ def validate_ticket(request):
                              "required.")
 
     return ServiceTicket.consumable.validate(service, ticket)
+
+def update_url(url, url_vars):
+    url_parts = list(urlparse(url))
+    qs = QueryDict(url_parts[4], mutable=True)
+    qs.update(url_vars)
+    url_parts[4] = qs.urlencode(safe='/')
+    return urlunparse(url_parts)
+
+def issue_service_ticket(ticket_request):
+    from casia.cas.models import ServiceTicket
+
+    st = ServiceTicket(user=ticket_request.user,
+                       session=ticket_request.session,
+                       url=ticket_request.url)
+    st.save()
+
+    target = update_url(ticket_request.url, {'ticket': st.ticket})
+    ticket_request.delete()
+
+    return HttpResponseRedirect(target)

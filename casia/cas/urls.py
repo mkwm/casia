@@ -16,4 +16,6 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns('',
     url(r'^validate$', 'casia.cas.views.validate', name='cas_validate'),
     url(r'^serviceValidate$', 'casia.cas.views.service_validate', name='cas_service_validate'),
+    url(r'^login$', 'casia.cas.views.login', name='cas_login'),
+    url(r'^issue/(?P<ticket_request_id>.*?)$', 'casia.cas.views.issue', name='cas_issue'),
 )

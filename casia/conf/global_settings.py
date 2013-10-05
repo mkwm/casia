@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'crispy_forms',
     'south',
+    'django_extensions',
     'casia.auth',
     'casia.assets.bootstrap',
     'casia.assets.fontawesome',

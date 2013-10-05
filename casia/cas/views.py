@@ -13,10 +13,14 @@
 
 from xml.etree.ElementTree import Element, SubElement
 
+from django.contrib.auth.views import redirect_to_login
+from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
 
 from casia.cas.exceptions import Error
-from casia.cas.utils import validate_ticket
+from casia.cas.models import TicketRequest
+from casia.cas.utils import validate_ticket, issue_service_ticket
 from casia.http.response import XMLResponse
 
 def validate(request):
@@ -40,3 +44,26 @@ def service_validate(request):
                                   attrib={'code': ex.code})
         auth_failure.text = ex.msg
     return XMLResponse(response)
+
+def login(request):
+    ticket_request = TicketRequest()
+    ticket_request.url = request.GET.get('service')
+    if ticket_request.url:
+        ticket_request.session_id = request.session.session_key
+        if request.user.is_authenticated():
+            ticket_request.user = request.user
+        ticket_request.save()
+        target = reverse('cas_issue',
+                     kwargs={'ticket_request_id': ticket_request.id})
+        return redirect(target)
+    else:
+        return redirect('index')
+
+def issue(request, ticket_request_id):
+    ticket_request = get_object_or_404(TicketRequest, id=ticket_request_id)
+    if ticket_request.user:
+        return issue_service_ticket(ticket_request)
+    else:
+        target = reverse('cas_issue',
+                         kwargs={'ticket_request_id': ticket_request.id})
+        return redirect_to_login(target)
