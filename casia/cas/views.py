@@ -13,8 +13,11 @@
 
 from xml.etree.ElementTree import Element, SubElement
 
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import redirect_to_login
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import resolve, reverse
+from django.dispatch import receiver
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 
@@ -49,12 +52,12 @@ def login(request):
     ticket_request = TicketRequest()
     ticket_request.url = request.GET.get('service')
     if ticket_request.url:
-        ticket_request.session_id = request.session.session_key
         if request.user.is_authenticated():
+            ticket_request.session_id = request.session.session_key
             ticket_request.user = request.user
         ticket_request.save()
         target = reverse('cas_issue',
-                     kwargs={'ticket_request_id': ticket_request.id})
+                         kwargs={'ticket_request_id': ticket_request.id})
         return redirect(target)
     else:
         return redirect('index')
@@ -67,3 +70,15 @@ def issue(request, ticket_request_id):
         target = reverse('cas_issue',
                          kwargs={'ticket_request_id': ticket_request.id})
         return redirect_to_login(target)
+
+@receiver(user_logged_in)
+def ticket_request_updater(sender, request, user, **kwargs):
+    target = request.GET.get(REDIRECT_FIELD_NAME)
+    if target:
+        target = resolve(target)
+        if target.url_name == 'cas_issue':
+            ticket_request_id = target.kwargs.get('ticket_request_id')
+            ticket_request = TicketRequest.objects.get(id=ticket_request_id)
+            ticket_request.user = request.user
+            ticket_request.session_id = request.session.session_key
+            ticket_request.save()
