@@ -82,3 +82,6 @@ def ticket_request_updater(sender, request, user, **kwargs):
             ticket_request.user = request.user
             ticket_request.session_id = request.session.session_key
             ticket_request.save()
+
+def logout(request):
+    return redirect('logout')

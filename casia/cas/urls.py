@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^serviceValidate$', 'casia.cas.views.service_validate', name='cas_service_validate'),
     url(r'^login$', 'casia.cas.views.login', name='cas_login'),
     url(r'^issue/(?P<ticket_request_id>.*?)$', 'casia.cas.views.issue', name='cas_issue'),
+    url(r'^logout$', 'casia.webapp.views.logout', name='cas_logout'),
 )
