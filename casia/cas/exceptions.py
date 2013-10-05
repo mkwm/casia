@@ -11,15 +11,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.http.response import HttpResponse
+class Error(Exception):
+    def __str__(self):
+        return self.msg
 
-from casia.cas.exceptions import Error
-from casia.cas.utils import validate_ticket
+class InvalidRequest(Error):
+    def __init__(self, msg):
+        self.code = 'INVALID_REQUEST'
+        self.msg = msg
 
-def validate(request):
-    st = None
-    try:
-        st = validate_ticket(request)
-    except Error:
-        pass
-    return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')
+class InvalidService(Error):
+    def __init__(self, msg):
+        self.code = 'INVALID_SERVICE'
+        self.msg = msg
+
+class InvalidTicket(Error):
+    def __init__(self, msg):
+        self.code = 'INVALID_TICKET'
+        self.msg = msg

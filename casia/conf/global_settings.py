@@ -14,6 +14,8 @@
 # Default Casia settings. Override these with settings in the module
 # pointed-to by the DJANGO_SETTINGS_MODULE environment variable.
 
+from datetime import timedelta
+
 from django.contrib.messages import constants as message
 
 TIME_ZONE = 'UTC'
@@ -38,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'south',
     'casia.auth',
     'casia.assets.bootstrap',
     'casia.assets.fontawesome',
@@ -62,3 +65,5 @@ MESSAGE_TAGS = {
 }
 
 SITE_ID = 1
+
+CONSUMABLE_LIFETIME = timedelta(minutes=5)

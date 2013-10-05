@@ -11,15 +11,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.http.response import HttpResponse
+from django.contrib import admin
 
-from casia.cas.exceptions import Error
-from casia.cas.utils import validate_ticket
+from casia.cas.models import ServiceTicket
 
-def validate(request):
-    st = None
-    try:
-        st = validate_ticket(request)
-    except Error:
-        pass
-    return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')
+class ServiceTicketAdmin(admin.ModelAdmin):
+    list_display = ('ticket', 'user', 'url', 'is_consumable')
+
+admin.site.register(ServiceTicket, ServiceTicketAdmin)

@@ -11,7 +11,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import patterns
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
+    url(r'^validate$', 'casia.cas.views.validate', name='cas_validate'),
 )
