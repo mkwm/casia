@@ -1,0 +1,9 @@
+{% extends 'webapp/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="page-header text-center">
+  <h1>Log in again</h1>
+  <p class="lead">Confirm your credentials for security sake</p>
+</div>
+{% crispy form %}
+{% endblock %}
