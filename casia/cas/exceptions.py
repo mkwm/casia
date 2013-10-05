@@ -15,6 +15,11 @@ class Error(Exception):
     def __str__(self):
         return self.msg
 
+class BadPGT(Error):
+    def __init__(self, msg):
+        self.code = 'BAD_PGT'
+        self.msg = msg
+
 class InvalidRequest(Error):
     def __init__(self, msg):
         self.code = 'INVALID_REQUEST'

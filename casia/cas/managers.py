@@ -11,6 +11,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
+import requests
+from requests.exceptions import SSLError
 from urlparse import urlparse
 
 from django.conf import settings
@@ -18,8 +20,10 @@ from django.db import models
 from django.db.models import Q
 from django.utils.timezone import now
 
-from casia.cas.exceptions import InvalidService, InvalidTicket
-from casia.cas.utils import get_url_netloc_patterns, get_url_path_patterns
+from casia.cas.exceptions import (BadPGT, InvalidRequest, InvalidService,
+                                  InvalidTicket)
+from casia.cas.utils import (generate_ticket, get_url_netloc_patterns,
+                             get_url_path_patterns, update_url)
 
 class ConsumableManager(models.Manager):
     def get_query_set(self):
@@ -34,11 +38,16 @@ class ConsumableManager(models.Manager):
         return obj
 
 class ServiceTicketManager(ConsumableManager):
-    def validate(self, service, ticket, renew):
+    def validate(self, service, ticket, renew, require_st):
         try:
             st = self.get_and_consume(ticket=ticket)
         except self.model.DoesNotExist:
             raise InvalidTicket("Ticket '%s' not recognized" % ticket)
+
+        if st.pgt and require_st:
+            raise InvalidService("Ticket '%s' is a proxy ticket, but only "
+                                 "service tickets are accepted." %
+                                 st)
 
         if st.url != service:
             raise InvalidService("Ticket '%s' does not match supplied service "
@@ -79,3 +88,46 @@ class ServiceManager(models.Manager):
         filters = filters & (path_filter | netloc_filter)
 
         return self.filter(filters).order_by('-priority')[:1].get()
+
+class ProxyGrantingTicketManager(models.Manager):
+    def get_by_request(self, request):
+        ticket = request.GET.get('pgt')
+        service = request.GET.get('targetService')
+
+        pgt = None
+
+        if not ticket or not service:
+            raise InvalidRequest("'pgt' and 'targetService' parameters are"
+                                 "both required.")
+
+        try:
+            pgt = self.get(ticket=ticket)
+        except self.model.DoesNotExist:
+            raise BadPGT("Ticket '%s' not recognized." % ticket)
+
+        return pgt
+
+    def create_for_request(self, request):
+        pgt_url = request.GET.get('pgtUrl')
+
+        pgt = None
+
+        if pgt_url:
+            urlparts = list(urlparse(pgt_url))
+            if urlparts[0] == 'https':
+                ticket = generate_ticket('PGT', 32)
+                iou = generate_ticket('PGTIOU', 32)
+                callback = update_url(pgt_url, {'pgtId': ticket,
+                                                'pgtIou': iou})
+                try:
+                    r = requests.get(callback)
+                    if r.status_code in (200, 301, 302):
+                        st_id = request.GET.get('ticket')
+                        pgt = self.model(ticket=ticket,
+                                         iou=iou,
+                                         url=pgt_url,
+                                         st_id=st_id)
+                        pgt.save()
+                except SSLError:
+                    pass
+        return pgt

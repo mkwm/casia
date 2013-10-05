@@ -36,14 +36,21 @@ def validate(request):
         pass
     return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')
 
-def service_validate(request):
+def service_validate(request, require_st=True):
     response = Element('cas:serviceResponse',
                        attrib={'xmlns:cas': 'http://www.yale.edu/tp/cas'})
     try:
-        st = validate_ticket(request)
+        st = validate_ticket(request, require_st)
         auth_success = SubElement(response, 'cas:authenticationSuccess')
         user = SubElement(auth_success, 'cas:user')
         user.text = st.user.get_username()
+        if st.pgt:
+            proxies = SubElement(auth_success, 'cas:proxies')
+            current = st
+            while current.pgt:
+                proxy = SubElement(proxies, 'cas:proxy')
+                proxy.text = current.pgt.url
+                current = current.pgt.st
     except Error as ex:
         auth_failure = SubElement(response, 'cas:authenticationFailure',
                                   attrib={'code': ex.code})

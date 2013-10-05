@@ -22,7 +22,7 @@ from casia.cas.exceptions import InvalidRequest
 def generate_ticket(prefix, length):
     return prefix + '-' + get_random_string(length)
 
-def validate_ticket(request):
+def validate_ticket(request, require_st=True):
     from casia.cas.models import ServiceTicket
 
     service = request.GET.get('service')
@@ -33,7 +33,7 @@ def validate_ticket(request):
         raise InvalidRequest("'service' and 'ticket' parameters are both "
                              "required.")
 
-    return ServiceTicket.consumable.validate(service, ticket, renew)
+    return ServiceTicket.consumable.validate(service, ticket, renew, require_st)
 
 def update_url(url, url_vars):
     url_parts = list(urlparse(url))

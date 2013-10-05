@@ -17,8 +17,8 @@ from django.db import models
 from django.utils.timezone import now
 from django_extensions.db.fields import UUIDField
 
-from casia.cas.managers import (ConsumableManager, ServiceTicketManager,
-    ServiceManager)
+from casia.cas.managers import (ConsumableManager, ProxyGrantingTicketManager,
+                                ServiceTicketManager, ServiceManager)
 from casia.cas.utils import generate_ticket
 
 class AbstractTicket(models.Model):
@@ -52,8 +52,6 @@ class AbstractConsumable(models.Model):
         abstract = True
 
 class ServiceTicket(AbstractTicket, AbstractConsumable):
-    prefix = 'ST'
-
     objects = models.Manager()
     consumable = ServiceTicketManager()
 
@@ -66,6 +64,15 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     url = models.TextField()
     service = models.ForeignKey('Service')
     renewed = models.BooleanField()
+    pgt = models.ForeignKey('ProxyGrantingTicket', blank=True, null=True,
+                            related_name='+')
+
+    def save(self, *args, **kwargs):
+        if not self.pgt:
+            self.prefix = 'ST'
+        else:
+            self.prefix = 'PT'
+        super(ServiceTicket, self).save(*args, **kwargs)
 
 class TicketRequest(models.Model):
     id = UUIDField(auto=True, primary_key=True)
@@ -100,3 +107,12 @@ class Service(models.Model):
 
     def __unicode__(self):
         return self.scheme + '://' + self.netloc + self.path
+
+class ProxyGrantingTicket(AbstractTicket):
+    objects = ProxyGrantingTicketManager()
+
+    prefix = 'PGT'
+
+    iou = models.CharField(max_length=255, unique=True)
+    url = models.TextField()
+    st = models.OneToOneField('ServiceTicket')

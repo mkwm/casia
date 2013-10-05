@@ -13,7 +13,11 @@
 
 from django.contrib import admin
 
-from casia.cas.models import Service, ServiceTicket, TicketRequest
+from casia.cas.models import (ProxyGrantingTicket, Service, ServiceTicket,
+                              TicketRequest)
+
+class ProxyGrantingTicketAdmin(admin.ModelAdmin):
+    list_display = ('ticket', 'iou', 'st', 'url')
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', )
@@ -24,6 +28,7 @@ class ServiceTicketAdmin(admin.ModelAdmin):
 class TicketRequestAdmin(admin.ModelAdmin):
     list_display = ('id', 'url', 'session', 'user')
 
+admin.site.register(ProxyGrantingTicket, ProxyGrantingTicketAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceTicket, ServiceTicketAdmin)
 admin.site.register(TicketRequest, TicketRequestAdmin)
