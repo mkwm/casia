@@ -17,7 +17,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, QueryDict
 from django.utils.crypto import get_random_string
 
-from casia.cas.exceptions import InvalidRequest
+from casia.cas.exceptions import InvalidRequest, InvalidService
 
 def generate_ticket(prefix, length):
     return prefix + '-' + get_random_string(length)
@@ -87,3 +87,25 @@ def get_url_path_patterns(url, count=settings.POLICY_PATH_COMPONENTS):
             pattern += tmp[0]
             patterns.append(pattern)
     return patterns
+
+def issue_proxy_ticket(request):
+    from casia.cas.models import ProxyGrantingTicket, Service, ServiceTicket
+
+    url = request.GET.get('targetService')
+    pgt = ProxyGrantingTicket.objects.get_by_request(request)
+    service = None
+
+    try:
+        service = Service.objects.get_by_url(url)
+    except Service.DoesNotExist:
+        raise InvalidService("Service '%s' is unknown." % url)
+
+    pt = ServiceTicket(user=pgt.st.user,
+                       session=pgt.st.session,
+                       url=url,
+                       service=service,
+                       renewed=False,
+                       pgt=pgt)
+    pt.save()
+
+    return pt

@@ -24,8 +24,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 
 from casia.cas.exceptions import Error
-from casia.cas.models import Service, TicketRequest
-from casia.cas.utils import validate_ticket, issue_service_ticket
+from casia.cas.models import ProxyGrantingTicket, Service, TicketRequest
+from casia.cas.utils import (validate_ticket, issue_proxy_ticket,
+                             issue_service_ticket)
 from casia.http.response import XMLResponse
 
 def validate(request):
@@ -44,6 +45,11 @@ def service_validate(request, require_st=True):
         auth_success = SubElement(response, 'cas:authenticationSuccess')
         user = SubElement(auth_success, 'cas:user')
         user.text = st.user.get_username()
+        if st.service.has_perm('proxy'):
+            pgt = ProxyGrantingTicket.objects.create_for_request(request)
+            if pgt:
+                pgt_iou = SubElement(auth_success, 'cas:proxyGrantingTicket')
+                pgt_iou.text = pgt.iou
         if st.pgt:
             proxies = SubElement(auth_success, 'cas:proxies')
             current = st
@@ -115,3 +121,17 @@ def ticket_request_updater(sender, request, user, **kwargs):
 
 def logout(request):
     return redirect('logout')
+
+def proxy(request):
+    response = Element('cas:serviceResponse',
+                       attrib={'xmlns:cas': 'http://www.yale.edu/tp/cas'})
+    try:
+        proxy_success = SubElement(response, 'cas:proxySuccess')
+        pt = issue_proxy_ticket(request)
+        proxy_ticket = SubElement(proxy_success, 'cas:proxyTicket')
+        proxy_ticket.text = pt.ticket
+    except Error as ex:
+        proxy_failure = SubElement(response, 'cas:proxyFailure',
+                                   attrib={'code': ex.code})
+        proxy_failure.text = ex.msg
+    return XMLResponse(response)

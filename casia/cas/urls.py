@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     url(r'^logout$', 'casia.webapp.views.logout', name='cas_logout'),
     url(r'^proxyValidate$', 'casia.cas.views.service_validate',
          {'require_st': False}, name='cas_proxy_validate'),
+    url(r'^proxy$', 'casia.cas.views.proxy', name='cas_proxy'),
 )

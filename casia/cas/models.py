@@ -108,6 +108,9 @@ class Service(models.Model):
     def __unicode__(self):
         return self.scheme + '://' + self.netloc + self.path
 
+    def has_perm(self, perm, obj=None):
+        return (self.is_active and self.is_trusted)
+
 class ProxyGrantingTicket(AbstractTicket):
     objects = ProxyGrantingTicketManager()
 

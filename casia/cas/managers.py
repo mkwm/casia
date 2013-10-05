@@ -12,7 +12,7 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 import requests
-from requests.exceptions import SSLError
+from requests.exceptions import RequestException
 from urlparse import urlparse
 
 from django.conf import settings
@@ -97,7 +97,7 @@ class ProxyGrantingTicketManager(models.Manager):
         pgt = None
 
         if not ticket or not service:
-            raise InvalidRequest("'pgt' and 'targetService' parameters are"
+            raise InvalidRequest("'pgt' and 'targetService' parameters are "
                                  "both required.")
 
         try:
@@ -120,14 +120,14 @@ class ProxyGrantingTicketManager(models.Manager):
                 callback = update_url(pgt_url, {'pgtId': ticket,
                                                 'pgtIou': iou})
                 try:
+                    st_id = request.GET.get('ticket')
+                    pgt = self.model(ticket=ticket,
+                                     iou=iou,
+                                     url=pgt_url,
+                                     st_id=st_id)
                     r = requests.get(callback)
                     if r.status_code in (200, 301, 302):
-                        st_id = request.GET.get('ticket')
-                        pgt = self.model(ticket=ticket,
-                                         iou=iou,
-                                         url=pgt_url,
-                                         st_id=st_id)
                         pgt.save()
-                except SSLError:
+                except RequestException:
                     pass
         return pgt
