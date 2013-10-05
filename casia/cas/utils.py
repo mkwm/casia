@@ -46,7 +46,8 @@ def issue_service_ticket(ticket_request):
 
     st = ServiceTicket(user=ticket_request.user,
                        session=ticket_request.session,
-                       url=ticket_request.url)
+                       url=ticket_request.url,
+                       service=ticket_request.service)
     st.save()
 
     target = update_url(ticket_request.url, {'ticket': st.ticket})
@@ -62,7 +63,6 @@ def get_url_netloc_patterns(url, count=settings.POLICY_NETLOC_COMPONENTS):
         pattern = component + '.' + pattern
         patterns.append(pattern[:-1])
     return patterns
-
 
 def get_url_path_patterns(url, count=settings.POLICY_PATH_COMPONENTS):
     patterns = []

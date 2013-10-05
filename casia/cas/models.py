@@ -64,10 +64,12 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     # nginx supports 8192 bytes in URLs by default
     # For that reasons, its safer to use TextField insted of CharField
     url = models.TextField()
+    service = models.ForeignKey('Service')
 
 class TicketRequest(models.Model):
     id = UUIDField(auto=True, primary_key=True)
     url = models.TextField()
+    service = models.ForeignKey('Service')
     session = models.ForeignKey(Session, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
 
