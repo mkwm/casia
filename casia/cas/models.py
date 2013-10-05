@@ -17,7 +17,8 @@ from django.db import models
 from django.utils.timezone import now
 from django_extensions.db.fields import UUIDField
 
-from casia.cas.managers import ConsumableManager, ServiceTicketManager
+from casia.cas.managers import (ConsumableManager, ServiceTicketManager,
+    ServiceManager)
 from casia.cas.utils import generate_ticket
 
 class AbstractTicket(models.Model):
@@ -72,3 +73,26 @@ class TicketRequest(models.Model):
 
     def __unicode__(self):
         return self.url
+
+class Service(models.Model):
+    objects = ServiceManager()
+
+    scheme = models.CharField(max_length=16)
+    netloc = models.CharField(max_length=255, blank=True)
+    path = models.CharField(max_length=255, blank=True)
+    priority = models.PositiveIntegerField(blank=True)
+    is_active = models.BooleanField()
+    is_trusted = models.BooleanField()
+
+    def save(self, *args, **kwargs):
+        if not self.priority:
+            priority = 0
+            if self.netloc:
+                priority += 10
+            if self.path:
+                priority += 20
+            self.priority = priority
+        super(Service, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.scheme + '://' + self.netloc + self.path

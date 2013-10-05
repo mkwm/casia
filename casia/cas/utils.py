@@ -13,6 +13,7 @@
 
 from urlparse import urlparse, urlunparse
 
+from django.conf import settings
 from django.http import HttpResponseRedirect, QueryDict
 from django.utils.crypto import get_random_string
 
@@ -52,3 +53,35 @@ def issue_service_ticket(ticket_request):
     ticket_request.delete()
 
     return HttpResponseRedirect(target)
+
+def get_url_netloc_patterns(url, count=settings.POLICY_NETLOC_COMPONENTS):
+    patterns = []
+    pattern = ''
+    netloc = url[1].rsplit('.', count)
+    for component in reversed(netloc[1:]):
+        pattern = component + '.' + pattern
+        patterns.append(pattern[:-1])
+    return patterns
+
+
+def get_url_path_patterns(url, count=settings.POLICY_PATH_COMPONENTS):
+    patterns = []
+    pattern = ''
+    path = url[2].split('/', count)
+    for component in path[:-1]:
+        pattern += component + '/'
+        patterns.append(pattern)
+    if url[2].endswith('/'):
+        pattern += path[-1]
+        patterns.append(pattern)
+    else:
+        tmp = path[-1].rsplit('/', 1)
+        if len(tmp) > 1:
+            pattern += tmp[0] + '/'
+            patterns.append(pattern)
+            pattern += tmp[1]
+            patterns.append(pattern)
+        else:
+            pattern += tmp[0]
+            patterns.append(pattern)
+    return patterns

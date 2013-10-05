@@ -13,7 +13,10 @@
 
 from django.contrib import admin
 
-from casia.cas.models import ServiceTicket, TicketRequest
+from casia.cas.models import Service, ServiceTicket, TicketRequest
+
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', )
 
 class ServiceTicketAdmin(admin.ModelAdmin):
     list_display = ('ticket', 'user', 'url', 'is_consumable')
@@ -21,5 +24,6 @@ class ServiceTicketAdmin(admin.ModelAdmin):
 class TicketRequestAdmin(admin.ModelAdmin):
     list_display = ('id', 'url', 'session', 'user')
 
+admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceTicket, ServiceTicketAdmin)
 admin.site.register(TicketRequest, TicketRequestAdmin)
