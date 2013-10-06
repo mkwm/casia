@@ -129,25 +129,24 @@ class ProxyGrantingTicket(AbstractTicket):
 
 @receiver(post_delete, sender=ServiceTicket)
 def st_post_delete(sender, instance, **kwargs):
-    if instance.policy.allow_single_logout:
-        urlparts = urlparse(instance.url)
-        if urlparts.scheme in ('http', 'https'):
-            time = now()
-            instant = time.isoformat()
-            if time.microsecond:
-                instant = instant[:23] + instant[26:]
-            if instant.endswith('+00:00'):
-                instant = instant[:-6] + 'Z'
-            request = Element('samlp:LogoutRequest',
-                              attrib={'ID': str(uuid4()),
-                                      'IssueInstant': instant,
-                                      'Version': '2.0'})
-            name_id = SubElement(request, 'saml:NameID')
-            name_id.text = instance.user.get_username()
-            session_index = SubElement(request, 'samlp:SessionIndex')
-            session_index.text = instance.ticket
-            try:
-                requests.post(instance.url,
-                              data={'logoutRequest': tostring(request)})
-            except:
-                pass
+    urlparts = urlparse(instance.url)
+    if urlparts.scheme in ('http', 'https'):
+        time = now()
+        instant = time.isoformat()
+        if time.microsecond:
+            instant = instant[:23] + instant[26:]
+        if instant.endswith('+00:00'):
+            instant = instant[:-6] + 'Z'
+        request = Element('samlp:LogoutRequest',
+                          attrib={'ID': str(uuid4()),
+                                  'IssueInstant': instant,
+                                  'Version': '2.0'})
+        name_id = SubElement(request, 'saml:NameID')
+        name_id.text = instance.user.get_username()
+        session_index = SubElement(request, 'samlp:SessionIndex')
+        session_index.text = instance.ticket
+        try:
+            requests.post(instance.url,
+                          data={'logoutRequest': tostring(request)})
+        except:
+            pass
