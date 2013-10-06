@@ -12,6 +12,7 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 from django import forms
+from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit
@@ -21,8 +22,8 @@ class LoginConfirmationForm(forms.Form):
     helper.form_class = 'form-horizontal'
     helper.layout = Layout(
         Div(
-            Submit('continue', 'Continue', css_class='btn-lg btn-success'),
-            Submit('abort', 'Abort', css_class='btn-lg btn-danger'),
+            Submit('continue', _('Continue'), css_class='btn-lg btn-success'),
+            Submit('abort', _('Abort'), css_class='btn-lg btn-danger'),
             css_class='text-center'
         ),
     )

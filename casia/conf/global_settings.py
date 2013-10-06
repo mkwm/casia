@@ -18,6 +18,9 @@ from datetime import timedelta
 
 from django.contrib.messages import constants as message
 
+import casia
+import os
+
 TIME_ZONE = 'UTC'
 
 MIDDLEWARE_CLASSES = (
@@ -71,3 +74,5 @@ CONSUMABLE_LIFETIME = timedelta(minutes=5)
 
 POLICY_NETLOC_COMPONENTS = 5
 POLICY_PATH_COMPONENTS = 5
+
+LOCALE_PATHS = [os.path.join(os.path.dirname(casia.__file__), 'locale')]

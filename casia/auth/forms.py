@@ -12,6 +12,8 @@
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.utils.translation import ugettext as _
+
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit
@@ -25,7 +27,7 @@ AuthenticationForm.helper.layout = Layout(
     PrependedText('username', '<span class="icon-fixed-width icon-user"></span>'),
     PrependedText('password', '<span class="icon-fixed-width icon-key"></span>'),
     Div(
-        Submit('log-in', 'Log in', css_class='btn-lg'),
+        Submit('log-in', _('Log in'), css_class='btn-lg'),
         css_class='text-center'
     ),
 )
@@ -40,7 +42,7 @@ PasswordChangeForm.helper.layout = Layout(
     'new_password1',
     'new_password2',
     Div(
-        Submit('change-password', 'Change password', css_class='btn-lg'),
+        Submit('change-password', _('Change password'), css_class='btn-lg'),
         css_class='col-sm-offset-2 col-sm-8',
     ),
 )

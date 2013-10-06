@@ -1,8 +1,9 @@
 {% extends 'webapp/base.html' %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="page-header text-center">
-  <h1>Central authentication</h1>
+  <h1>{% trans 'Central authentication' %}</h1>
 </div>
 {% crispy form %}
 {% endblock %}

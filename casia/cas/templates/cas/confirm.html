@@ -1,9 +1,10 @@
 {% extends 'webapp/base.html' %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="page-header text-center">
-  <h1>Confirmation</h1>
+  <h1>{% trans 'Confirmation' %}</h1>
 </div>
-<p class="lead text-center">Authentication to <strong>{{ service }}</strong> requires your consent</p>
+<p class="lead text-center">{% blocktrans %}Authentication to <strong>{{ service }}</strong> requires your consent{% endblocktrans %}</p>
 {% crispy form %}
 {% endblock %}

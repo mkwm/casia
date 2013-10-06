@@ -22,6 +22,7 @@ from django.dispatch import receiver
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
+from django.utils.translation import ugettext as _
 
 from casia.cas.exceptions import Error
 from casia.cas.forms import LoginConfirmationForm
@@ -78,7 +79,7 @@ def login(request):
         try:
             service = Service.objects.get_by_url(ticket_request.url)
             if not service.is_active:
-                context.update({'error': 'This service is inactive'})
+                context.update({'error': _('This service is inactive')})
                 return TemplateResponse(request, 'cas/security_error.html',
                                         context)
             ticket_request.service = service
@@ -93,7 +94,7 @@ def login(request):
                              kwargs={'ticket_request_id': ticket_request.id})
             return redirect(target)
         except Service.DoesNotExist:
-            context.update({'error': 'This service is unknown'})
+            context.update({'error': _('This service is unknown')})
             return TemplateResponse(request, 'cas/security_error.html',
                                     context)
     else:
@@ -104,7 +105,7 @@ def issue(request, ticket_request_id):
     context = {
         'site': current_site,
         'site_name': current_site.name,
-        'title': 'Confirmation'
+        'title': _('Confirmation')
     }
     ticket_request = get_object_or_404(TicketRequest, id=ticket_request_id)
     if ticket_request.user:

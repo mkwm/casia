@@ -1,8 +1,9 @@
 {% extends 'webapp/base.html' %}
+{% load i18n %}
 {% block content %}
 <div class="page-header">
-  <h1>Error</h1>
+  <h1>{% trans 'Error' %}</h1>
 </div>
 <p class="lead text-danger">{{ error }}</p>
-<p>Authentication to the service was aborted due to security reasons</p>
+<p>{% trans 'Authentication to the service was aborted due to security reasons' %}</p>
 {% endblock %}
