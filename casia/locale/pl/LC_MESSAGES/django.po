@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Casia\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-06 13:40+0200\n"
+"PO-Revision-Date: 2013-10-06 13:50+0100\n"
+"Last-Translator: Mateusz Małek <translator@mkwm.eu.org>\n"
+"Language-Team: Mateusz Małek <translator@mkwm.eu.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.5\n"
+"Language: pl\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: auth/forms.py:30 webapp/views.py:43 webapp/templates/webapp/base.html:45
+msgid "Log in"
+msgstr "Zaloguj się"
+
+#: auth/forms.py:45 webapp/templates/webapp/base.html:38
+msgid "Change password"
+msgstr "Zmień hasło"
+
+#: cas/forms.py:25
+msgid "Continue"
+msgstr "Kontynuuj"
+
+#: cas/forms.py:26
+msgid "Abort"
+msgstr "Przerwij"
+
+#: cas/views.py:82
+msgid "This service is inactive"
+msgstr "Ta usługa jest nieaktywna"
+
+#: cas/views.py:97
+msgid "This service is unknown"
+msgstr "Ta usługa jest nieznana"
+
+#: cas/views.py:108 cas/templates/cas/confirm.html:6
+msgid "Confirmation"
+msgstr "Potwierdzenie"
+
+#: cas/templates/cas/confirm.html:8
+#, python-format
+msgid "Authentication to <strong>%(service)s</strong> requires your consent"
+msgstr "Uwierzytelnienie do <strong>%(service)s</strong> wymaga twojej zgody"
+
+#: cas/templates/cas/security_error.html:5
+msgid "Error"
+msgstr "Błąd"
+
+#: cas/templates/cas/security_error.html:8
+msgid "Authentication to the service was aborted due to security reasons"
+msgstr ""
+"Uwierzytelnianie do usługi zostało przerwane ze względów bezpieczeństwa"
+
+#: webapp/views.py:34 webapp/templates/webapp/index.html:5
+msgid "Logged in"
+msgstr "Zalogowany"
+
+#: webapp/views.py:49 webapp/templates/webapp/relogin.html:5
+msgid "Log in again"
+msgstr "Zaloguj się ponownie"
+
+#: webapp/views.py:56
+msgid "You have been logged out successfully"
+msgstr "Zostałeś pomyślnie wylogowany"
+
+#: webapp/views.py:58
+msgid "You were not logged in"
+msgstr "Nie byłeś zalogowany"
+
+#: webapp/views.py:67 webapp/templates/webapp/password_change.html:6
+msgid "Password change"
+msgstr "Zmiana hasła"
+
+#: webapp/views.py:80 webapp/templates/webapp/password_change_done.html:5
+msgid "Password changed"
+msgstr "Hasło zmienione"
+
+#: webapp/templates/webapp/base.html:36
+msgid "Manage site"
+msgstr "Zarządzaj serwisem"
+
+#: webapp/templates/webapp/base.html:39
+msgid "Log out"
+msgstr "Wyloguj się"
+
+#: webapp/templates/webapp/index.html:7
+#, python-format
+msgid "You are logged into %(site_name)s"
+msgstr "Jesteś zalogowany do %(site_name)s"
+
+#: webapp/templates/webapp/index.html:8
+msgid "Authentication to the services would be performed automatically"
+msgstr "Uwierzytelnianie do usług będzie wykonywane automatycznie"
+
+#: webapp/templates/webapp/login.html:6
+msgid "Central authentication"
+msgstr "Centralne uwierzytelnianie"
+
+#: webapp/templates/webapp/password_change_done.html:7
+msgid "Your password has been changed"
+msgstr "Twoje hasło zostało zmienione"
+
+#: webapp/templates/webapp/relogin.html:6
+msgid "Confirm your credentials for security sake"
+msgstr "Potwierdź swoje poświadczenia ze względów bezpieczeństwa"
