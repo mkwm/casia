@@ -24,8 +24,8 @@ AuthenticationForm.helper.label_class = 'hide'
 AuthenticationForm.helper.field_class = 'col-sm-offset-4 col-sm-4'
 AuthenticationForm.helper.html5_required = True
 AuthenticationForm.helper.layout = Layout(
-    PrependedText('username', '<span class="icon-fixed-width icon-user"></span>'),
-    PrependedText('password', '<span class="icon-fixed-width icon-key"></span>'),
+    PrependedText('username', '<span class="fa fa-fw fa-user"></span>'),
+    PrependedText('password', '<span class="fa fa-fw fa-key"></span>'),
     Div(
         Submit('log-in', _('Log in'), css_class='btn-lg'),
         css_class='text-center'
