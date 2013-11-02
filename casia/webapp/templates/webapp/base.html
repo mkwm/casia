@@ -59,5 +59,10 @@
     </div>
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+        $(function(){
+            if ($(":focus").length == 0) $(":input:visible:first").focus();
+        })
+    </script>
   </body>
 </html>

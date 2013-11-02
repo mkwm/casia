@@ -23,7 +23,7 @@ from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.utils.translation import ugettext as _
 
-from casia.auth.forms import AuthenticationForm, ReauthenticationFormWrapper
+from casia.auth.forms import AuthenticationForm, PasswordChangeForm, ReauthenticationFormWrapper
 
 @login_required
 def index(request):
@@ -69,6 +69,7 @@ def password_change(request):
     post_change_redirect = reverse('password_change_done')
     return django_password_change(request,
         template_name='webapp/password_change.html', extra_context=context,
+        password_change_form=PasswordChangeForm,
         post_change_redirect=post_change_redirect)
 
 @login_required
