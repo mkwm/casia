@@ -55,7 +55,6 @@ class PasswordChangeForm(DjangoPasswordChangeForm):
                 css_class='col-sm-offset-2 col-sm-8',
             ),
         )
-DjangoPasswordChangeForm = PasswordChangeForm
 
 class ReauthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):

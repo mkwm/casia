@@ -11,5 +11,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-# Monkey patch authentication and password change forms
-import casia.auth.forms
+from django.contrib.auth.backends import ModelBackend
+
+from casia.auth.forms import PasswordChangeForm
+
+ModelBackend.password_change_form = PasswordChangeForm
