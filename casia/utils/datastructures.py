@@ -11,10 +11,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.utils.translation import ugettext_lazy as _
+from itertools import ifilter
 
-from casia.template import menu, MenuItem
 
-menu['navbar'].append(MenuItem('password_change', _('Change password'), icon='key'))
-menu['navbar'].append(MenuItem('admin:index', _('Admin site'), lambda request: request.user.is_staff, icon='star'))
-menu['navbar'].append(MenuItem('logout', _('Log out'), icon='sign-out'))
+class ContextDict(object):
+    def __init__(self, obj, predicate, context):
+        self._obj = obj
+        self._predicate = predicate
+        self._context = context
+
+    def __getitem__(self, item):
+        return ifilter(lambda x: self._predicate(self._context, x), self._obj[item])

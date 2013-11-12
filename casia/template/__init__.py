@@ -11,10 +11,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.utils.translation import ugettext_lazy as _
+from collections import defaultdict, namedtuple
 
-from casia.template import menu, MenuItem
 
-menu['navbar'].append(MenuItem('password_change', _('Change password'), icon='key'))
-menu['navbar'].append(MenuItem('admin:index', _('Admin site'), lambda request: request.user.is_staff, icon='star'))
-menu['navbar'].append(MenuItem('logout', _('Log out'), icon='sign-out'))
+class MenuItem(namedtuple('MenuItem', ['url', 'label', 'condition', 'icon'])):
+    def __new__(cls, url, label, condition=None, icon=None):
+        return super(MenuItem, cls).__new__(cls, url, label, condition, icon)
+
+menu = defaultdict(list)
