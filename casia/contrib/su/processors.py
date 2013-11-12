@@ -11,15 +11,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import include, patterns
+from django.contrib.auth.models import AnonymousUser
 
-from casia.webapp.urls import urlpatterns as webapp_urlpatterns
-import casia.cas.urls
-import casia.contrib.su.urls
+from casia.contrib.su import SU_SESSION_KEY
 
-urlpatterns = patterns('',
-    (r'^cas/', include(casia.cas.urls)),
-    (r'^su/', include(casia.contrib.su.urls)),
-)
 
-urlpatterns += webapp_urlpatterns
+def real_user(request):
+    if not hasattr(request, 'real_user'):
+        return {
+            'real_user': getattr(request, 'user', AnonymousUser()),
+            'is_under_su': False,
+        }
+    else:
+        return {
+            'real_user': request.real_user,
+            'is_under_su': SU_SESSION_KEY in request.session,
+        }
