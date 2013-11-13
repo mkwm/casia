@@ -1,0 +1,73 @@
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | {{ site_name }}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/webapp.css' %}" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="{% static 'js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'index' %}">{{ site_name }}</a>
+        </div>
+        <div class="navbar-collapse collapse">
+{% if user.is_authenticated %}
+          <ul class="nav navbar-nav pull-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-user"></span> <strong>{% firstof user.get_full_name user.get_username %}</strong> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+{% for item in menu.navbar %}
+                <li><a href="{% url item.url %}"><span class="fa fa-fw fa-{{ item.icon|default:'caret-right' }}"></span> {{ item.label }}</a></li>
+{% endfor %}
+              </ul>
+            </li>
+	      </ul>
+{% else %}
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="{% url 'login' %}"><span class="fa fa-fw fa-sign-in"></span> <strong>{% trans 'Log in' %}</strong></a></li>
+	      </ul>
+{% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="container">
+{% for message in messages %}
+      <div class="alert alert-dismissable{% if message.tags %} {{ message.tags }}{% endif %}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ message }}
+      </div>
+{% endfor %}
+{% block content %}{% endblock %}
+    </div>
+{% if is_under_su %}
+    <div class="hidden-xs navbar navbar-inverse navbar-fixed-bottom">
+      <div class="container">
+        <p class="navbar-text"><span class="fa fa-fw fa-info-circle"></span> You are logged in as <span class="fa fa-fw fa-user"></span> <strong>{% firstof real_user.get_full_name real_user.get_username %}</strong>, but you have switched to another user account</p>
+      </div>
+    </div>
+{% endif %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+        $(function(){
+            if ($(":focus").length == 0) $(":input:visible:first").focus();
+        })
+    </script>
+  </body>
+</html>
