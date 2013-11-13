@@ -19,6 +19,9 @@ Casia includes the following external components:
 + [jQuery](http://jquery.org/) by jQuery Foundation, Inc. which is licensed under the MIT License
 + [Respond.js](https://github.com/scottjehl/Respond) by Scott Jehl which is licensed under the MIT License or GNU GPL, Version 2.0
 
+Additionally:
++ casia.contrib.su module is based on oioioi.su from [OIOIOI by SIO2 Project](https://github.com/sio2project/oioioi)
+
 Copyright and license
 ---------------------
 
