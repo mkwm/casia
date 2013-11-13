@@ -2,3 +2,5 @@ Django
 django-crispy-forms
 South
 django-extensions
+celery
+django-celery

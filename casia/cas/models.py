@@ -26,6 +26,7 @@ from django_extensions.db.fields import UUIDField
 
 from casia.cas.managers import (ConsumableManager, ProxyGrantingTicketManager,
                                 ServiceTicketManager, ServiceManager)
+from casia.cas.tasks import logout as logout_task
 from casia.cas.utils import generate_ticket
 
 class AbstractTicket(models.Model):
@@ -146,7 +147,6 @@ def st_post_delete(sender, instance, **kwargs):
         session_index = SubElement(request, 'samlp:SessionIndex')
         session_index.text = instance.ticket
         try:
-            requests.post(instance.url,
-                          data={'logoutRequest': tostring(request)})
+            logout_task.delay(instance.url, tostring(request))
         except:
             pass
