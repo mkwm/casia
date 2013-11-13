@@ -6,12 +6,14 @@
 # https://github.com/sio2project/oioioi
 
 from django import forms
-from django.contrib.auth import get_backends
-from django.contrib.auth.models import User
+from django.contrib.auth import get_backends, get_user_model
 
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit
+
+
+User = get_user_model()
 
 
 def authentication_backends():
