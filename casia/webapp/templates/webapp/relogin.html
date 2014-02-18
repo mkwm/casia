@@ -2,9 +2,12 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="page-header text-center">
-  <h1>{% trans 'Log in again' %}</h1>
+<div class="text-center">
+  <h1>{{ title }}</h1>
   <p class="lead">{% trans 'Confirm your credentials for security sake' %}</p>
-</div>
+  <div class="clearfix"></div>
+  <div class="col-sm-offset-4 col-sm-4">
 {% crispy form %}
+  </div>
+</div>
 {% endblock %}
