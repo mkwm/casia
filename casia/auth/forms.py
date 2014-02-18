@@ -23,19 +23,14 @@ class AuthenticationForm(DjangoAuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(AuthenticationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'hide'
-        self.helper.field_class = 'col-sm-offset-4 col-sm-4'
+        self.helper.label_class = 'sr-only'
         self.helper.html5_required = True
         self.helper.layout = Layout(
             PrependedText('username', '<span class="fa fa-fw fa-user"></span>',
                           placeholder=self.fields['username'].label),
             PrependedText('password', '<span class="fa fa-fw fa-key"></span>',
                           placeholder=self.fields['password'].label),
-            Div(
-                Submit('log-in', _('Log in'), css_class='btn-lg'),
-                css_class='text-center'
-            ),
+            Submit('log-in', _('Log in'), css_class='btn-lg btn-block'),
         )
 
 class PasswordChangeForm(DjangoPasswordChangeForm):

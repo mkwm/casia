@@ -1,9 +1,13 @@
-{% extends 'webapp/base.html' %}
+{% extends 'webapp/basic.html' %}
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="page-header text-center">
-  <h1>{% trans 'Central authentication' %}</h1>
-</div>
+<div class="text-center">
+  <h1>{{ title }}</h1>
+  <p class="lead">{% blocktrans %}Authenticate to your account at {{ site_name }}{% endblocktrans %}</p>
+  <div class="clearfix"></div>
+  <div class="col-sm-offset-4 col-sm-4">
 {% crispy form %}
+  </div>
+</div>
 {% endblock %}
