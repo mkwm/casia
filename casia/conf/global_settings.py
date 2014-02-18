@@ -36,6 +36,7 @@ ROOT_URLCONF = 'casia.conf.urls'
 WSGI_APPLICATION = 'casia.core.wsgi.application'
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

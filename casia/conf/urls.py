@@ -11,15 +11,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import include, patterns
+from django.conf.urls import patterns, include, url
 
 from casia.webapp.urls import urlpatterns as webapp_urlpatterns
 import casia.cas.urls
 import casia.contrib.su.urls
 
+from django.contrib import admin
+admin.autodiscover()
+
 urlpatterns = patterns('',
-    (r'^cas/', include(casia.cas.urls)),
-    (r'^su/', include(casia.contrib.su.urls)),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^cas/', include(casia.cas.urls)),
+    url(r'^su/', include(casia.contrib.su.urls)),
 )
 
 urlpatterns += webapp_urlpatterns
