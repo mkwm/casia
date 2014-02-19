@@ -19,8 +19,10 @@ from django.utils.crypto import get_random_string
 
 from casia.cas.exceptions import InvalidRequest, InvalidService
 
+
 def generate_ticket(prefix, length):
     return prefix + '-' + get_random_string(length)
+
 
 def validate_ticket(request, require_st=True):
     from casia.cas.models import ServiceTicket
@@ -35,12 +37,14 @@ def validate_ticket(request, require_st=True):
 
     return ServiceTicket.consumable.validate(service, ticket, renew, require_st)
 
+
 def update_url(url, url_vars):
     url_parts = list(urlparse(url))
     qs = QueryDict(url_parts[4], mutable=True)
     qs.update(url_vars)
     url_parts[4] = qs.urlencode(safe='/')
     return urlunparse(url_parts)
+
 
 def issue_service_ticket(ticket_request):
     from casia.cas.models import ServiceTicket
@@ -57,6 +61,7 @@ def issue_service_ticket(ticket_request):
 
     return HttpResponseRedirect(target)
 
+
 def get_url_netloc_patterns(url, count=settings.POLICY_NETLOC_COMPONENTS):
     patterns = []
     pattern = ''
@@ -65,6 +70,7 @@ def get_url_netloc_patterns(url, count=settings.POLICY_NETLOC_COMPONENTS):
         pattern = component + '.' + pattern
         patterns.append(pattern[:-1])
     return patterns
+
 
 def get_url_path_patterns(url, count=settings.POLICY_PATH_COMPONENTS):
     patterns = []
@@ -87,6 +93,7 @@ def get_url_path_patterns(url, count=settings.POLICY_PATH_COMPONENTS):
             pattern += tmp[0]
             patterns.append(pattern)
     return patterns
+
 
 def issue_proxy_ticket(request):
     from casia.cas.models import ProxyGrantingTicket, Service, ServiceTicket

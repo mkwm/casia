@@ -14,6 +14,7 @@
 from casia.core.celery import app
 import requests
 
+
 @app.task
 def logout(url, request):
     requests.post(url, data={'logoutRequest': request})
