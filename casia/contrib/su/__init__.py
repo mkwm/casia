@@ -40,4 +40,4 @@ def logout_then_login(request, *args, **kwargs):
         return old_logout_then_login(request, *args, **kwargs)
 views.logout_then_login = logout_then_login
 
-menu['navbar'].append(MenuItem('su', 'Switch user', lambda request: request.user.has_perm('auth.switch_user')))
+menu['navbar'].append(MenuItem('su:su', 'Switch user', lambda request: request.user.has_perm('auth.switch_user')))

@@ -29,19 +29,14 @@ class SwitchUserForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SwitchUserForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'hide'
-        self.helper.field_class = 'col-sm-offset-4 col-sm-4'
+        self.helper.label_class = 'sr-only'
         self.helper.html5_required = True
         self.helper.layout = Layout(
             PrependedText('user', '<span class="fa fa-fw fa-user"></span>',
                           placeholder=self.fields['user'].label),
             PrependedText('backend', '<span class="fa fa-fw fa-key"></span>',
                           placeholder=self.fields['backend'].label),
-            Div(
-                Submit('su', 'Switch user', css_class='btn-lg'),
-                css_class='text-center'
-            ),
+            Submit('su', 'Log in', css_class='btn-lg btn-block'),
         )
 
     def clean_user(self):

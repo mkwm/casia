@@ -2,8 +2,13 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="page-header text-center">
-  <h1>Switch user</h1>
-</div>
+<div class="text-center">
+  <h1>{{ title }}</h1>
+  <p class="lead">{% trans 'Switch to other user account' %}</p>
+  <p>{% trans 'To begin working in different user account context, enter their username and choose authentication backend that switched session should be tied with' %}</p>
+  <div class="clearfix"></div>
+  <div class="col-sm-offset-4 col-sm-4">
 {% crispy form %}
+  </div>
+</div>
 {% endblock %}

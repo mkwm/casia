@@ -55,6 +55,7 @@ INSTALLED_APPS = (
     'casia.assets.respondjs',
     'casia.cas',
     'casia.webapp',
+    'casia.contrib.su',
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

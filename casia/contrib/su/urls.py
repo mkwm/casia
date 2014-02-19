@@ -14,7 +14,7 @@
 from django.conf.urls import patterns, include, url
 
 su_urlpatterns = patterns('casia.contrib.su.views',
-    url(r'^$', 'index', name='index'),
+    url(r'^$', 'su', name='su'),
 )
 
 urlpatterns = patterns('',
