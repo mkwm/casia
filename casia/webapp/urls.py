@@ -13,12 +13,10 @@
 
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('',
-    url(r'^$', 'casia.webapp.views.index', name='index'),
-    url(r'^login/$', 'casia.webapp.views.login', name='login'),
-    url(r'^logout/$', 'casia.webapp.views.logout', name='logout'),
-    url(r'^password_change/$', 'casia.webapp.views.password_change',
-        name='password_change'),
-    url(r'^password_change/done/$', 'casia.webapp.views.password_change_done',
-        name='password_change_done'),
+urlpatterns = patterns('casia.webapp.views',
+    url(r'^$', 'index', name='index'),
+    url(r'^login/$', 'login', name='login'),
+    url(r'^logout/$', 'logout', name='logout'),
+    url(r'^password_change/$', 'password_change', name='password_change'),
+    url(r'^password_change/done/$', 'password_change_done', name='password_change_done'),
 )

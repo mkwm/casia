@@ -11,17 +11,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, include, url
+
+cas_urlpatterns = patterns('casia.cas.views',
+    url(r'^validate$', 'validate', name='validate'),
+    url(r'^serviceValidate$', 'service_validate', name='service_validate'),
+    url(r'^login$', 'login', name='login'),
+    url(r'^issue/(?P<ticket_request_id>.*?)$', 'issue', name='issue'),
+    url(r'^logout$', 'logout', name='logout'),
+    url(r'^proxyValidate$', 'service_validate', {'require_st': False}, name='proxy_validate'),
+    url(r'^proxy$', 'proxy', name='proxy'),
+)
 
 urlpatterns = patterns('',
-    url(r'^validate$', 'casia.cas.views.validate', name='cas_validate'),
-    url(r'^serviceValidate$', 'casia.cas.views.service_validate',
-        name='cas_service_validate'),
-    url(r'^login$', 'casia.cas.views.login', name='cas_login'),
-    url(r'^issue/(?P<ticket_request_id>.*?)$', 'casia.cas.views.issue',
-        name='cas_issue'),
-    url(r'^logout$', 'casia.webapp.views.logout', name='cas_logout'),
-    url(r'^proxyValidate$', 'casia.cas.views.service_validate',
-         {'require_st': False}, name='cas_proxy_validate'),
-    url(r'^proxy$', 'casia.cas.views.proxy', name='cas_proxy'),
+    url(r'^cas/', include(cas_urlpatterns, 'cas')),
 )

@@ -11,19 +11,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
+from django.conf import settings
 from django.conf.urls import patterns, include, url
-
-from casia.webapp.urls import urlpatterns as webapp_urlpatterns
-import casia.cas.urls
-import casia.contrib.su.urls
+from django.utils.importlib import import_module
 
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^cas/', include(casia.cas.urls)),
-    url(r'^su/', include(casia.contrib.su.urls)),
-)
+urlpatterns = patterns('')
 
-urlpatterns += webapp_urlpatterns
+for app in settings.INSTALLED_APPS:
+    try:
+        if app.startswith('casia.'):
+            urls_module = import_module(app + '.urls')
+            urlpatterns += getattr(urls_module, 'urlpatterns')
+    except ImportError:
+        pass
+
+urlpatterns.extend([
+    url(r'^admin/', include(admin.site.urls)),
+])
