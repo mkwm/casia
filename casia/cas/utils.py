@@ -96,15 +96,15 @@ def get_url_path_patterns(url, count=settings.POLICY_PATH_COMPONENTS):
 
 
 def issue_proxy_ticket(request):
-    from casia.cas.models import ProxyGrantingTicket, Service, ServiceTicket
+    from casia.cas.models import ProxyGrantingTicket, ServiceURL, ServiceTicket
 
     url = request.GET.get('targetService')
     pgt = ProxyGrantingTicket.objects.get_by_request(request)
     service = None
 
     try:
-        service = Service.objects.get_by_url(url)
-    except Service.DoesNotExist:
+        service = ServiceURL.objects.get_by_url(url)
+    except ServiceURL.DoesNotExist:
         raise InvalidService("Service '%s' is unknown." % url)
 
     pt = ServiceTicket(user=pgt.st.user,

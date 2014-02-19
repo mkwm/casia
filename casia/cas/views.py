@@ -97,7 +97,7 @@ def login(request):
             target = reverse('cas:issue',
                              kwargs={'ticket_request_id': ticket_request.id})
             return redirect(target)
-        except Service.DoesNotExist:
+        except ServiceURL.DoesNotExist:
             context.update({'error': _('This service is unknown')})
             return TemplateResponse(request, 'cas/security_error.html',
                                     context)
