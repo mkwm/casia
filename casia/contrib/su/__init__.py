@@ -15,9 +15,10 @@ from django.db.models.signals import post_syncdb
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import models as auth_models, get_user_model, views
 from django.contrib.auth.models import Permission
+from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 
-from casia.template import menu, MenuItem
+from casia.template import menu
 
 
 SU_SESSION_KEY = '_su_user_id'
@@ -40,4 +41,5 @@ def logout_then_login(request, *args, **kwargs):
         return old_logout_then_login(request, *args, **kwargs)
 views.logout_then_login = logout_then_login
 
-menu['navbar'].append(MenuItem('su:su', 'Switch user', lambda request: request.user.has_perm('auth.switch_user')))
+
+menu['navbar'].register('su', 'Switch user', lambda _: reverse('su:su'), condition=lambda request: request.user.has_perm('auth.switch_user'))

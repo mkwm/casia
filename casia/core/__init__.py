@@ -11,10 +11,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from casia.template import menu, MenuItem
+from casia.template import menu
 
-menu['navbar'].append(MenuItem('password_change', _('Change password'), icon='key'))
-menu['navbar'].append(MenuItem('admin:index', _('Admin site'), lambda request: request.user.is_staff, icon='star'))
-menu['navbar'].append(MenuItem('logout', _('Log out'), icon='sign-out'))
+
+menu['navbar'].register('password_change', _('Change password'), lambda _: reverse('password_change'))
+menu['navbar'].register('admin', _('Admin site'), lambda _: reverse('admin:index'), condition=lambda request: request.user.is_staff)
+menu['navbar'].register('logout', _('Log out'), lambda _: reverse('logout'))

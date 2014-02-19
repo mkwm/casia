@@ -11,14 +11,43 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from itertools import ifilter
+from bisect import bisect_right
+from sys import maxint
 
 
 class ContextDict(object):
-    def __init__(self, obj, predicate, context):
+    def __init__(self, obj, context):
         self._obj = obj
-        self._predicate = predicate
         self._context = context
 
     def __getitem__(self, item):
-        return ifilter(lambda x: self._predicate(self._context, x), self._obj[item])
+        return self._obj[item].template_context(self._context)
+
+
+class OrderedRegistry(object):
+    def __init__(self):
+        self.items = []
+        self.keys = []
+
+    def register(self, value, order=maxint):
+        pos = bisect_right(self.keys, order)
+        self.items.insert(pos, value)
+        self.keys.insert(pos, order)
+        return value
+
+    def unregister(self, value):
+        pos = self.items.index(value)
+        del self.items[pos]
+        del self.keys[pos]
+
+    def __iter__(self):
+        return iter(self.items)
+
+    def __len__(self):
+        return len(self.items)
+
+    def register_decorator(self, order=maxint):
+        def decorator(func):
+            self.register(func, order)
+            return func
+        return decorator

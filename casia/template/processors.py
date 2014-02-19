@@ -16,5 +16,5 @@ from casia.utils.datastructures import ContextDict
 
 
 def menu(request):
-    context_menu = ContextDict(casia_menu, lambda context, x: not (x.condition and not x.condition(context)), request)
+    context_menu = ContextDict(casia_menu, request)
     return {'menu': context_menu}
