@@ -25,6 +25,7 @@ from casia.cas.exceptions import (BadPGT, InvalidRequest, InvalidService,
 from casia.cas.utils import (generate_ticket, get_url_netloc_patterns,
                              get_url_path_patterns, update_url)
 
+
 class ConsumableManager(models.Manager):
     def get_query_set(self):
         return (super(ConsumableManager, self).get_query_set()
@@ -36,6 +37,7 @@ class ConsumableManager(models.Manager):
         obj.consumed_at = now()
         obj.save()
         return obj
+
 
 class ServiceTicketManager(ConsumableManager):
     def validate(self, service, ticket, renew, require_st):
@@ -63,7 +65,8 @@ class ServiceTicketManager(ConsumableManager):
 
         return st
 
-class ServiceManager(models.Manager):
+
+class ServiceURLManager(models.Manager):
     def get_by_url(self, url):
         # urlparse returns named tuple
         # However, we need to edit it. Therefore we cast it to list.
@@ -87,7 +90,8 @@ class ServiceManager(models.Manager):
 
         filters = filters & (path_filter | netloc_filter)
 
-        return self.filter(filters).order_by('-priority')[:1].get()
+        return self.filter(filters).order_by('-priority')[:1].get().service
+
 
 class ProxyGrantingTicketManager(models.Manager):
     def get_by_request(self, request):

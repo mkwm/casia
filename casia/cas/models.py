@@ -25,9 +25,11 @@ from django.utils.timezone import now
 from django_extensions.db.fields import UUIDField
 
 from casia.cas.managers import (ConsumableManager, ProxyGrantingTicketManager,
-                                ServiceTicketManager, ServiceManager)
+                                ServiceTicketManager, ServiceURLManager)
 from casia.cas.tasks import logout as logout_task
 from casia.cas.utils import generate_ticket
+from casia.core.models import Service
+
 
 class AbstractTicket(models.Model):
     length = 32
@@ -44,6 +46,7 @@ class AbstractTicket(models.Model):
     class Meta:
         abstract = True
 
+
 class AbstractConsumable(models.Model):
     objects = models.Manager()
     consumable = ConsumableManager()
@@ -59,6 +62,7 @@ class AbstractConsumable(models.Model):
     class Meta:
         abstract = True
 
+
 class ServiceTicket(AbstractTicket, AbstractConsumable):
     objects = models.Manager()
     consumable = ServiceTicketManager()
@@ -70,7 +74,7 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
     # nginx supports 8192 bytes in URLs by default
     # For that reasons, its safer to use TextField insted of CharField
     url = models.TextField()
-    service = models.ForeignKey('Service')
+    service = models.ForeignKey(Service)
     renewed = models.BooleanField()
     pgt = models.ForeignKey('ProxyGrantingTicket', blank=True, null=True,
                             related_name='+')
@@ -82,10 +86,11 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
             self.prefix = 'PT'
         super(ServiceTicket, self).save(*args, **kwargs)
 
+
 class TicketRequest(models.Model):
     id = UUIDField(auto=True, primary_key=True)
     url = models.TextField()
-    service = models.ForeignKey('Service')
+    service = models.ForeignKey(Service)
     renewed = models.BooleanField()
     session = models.ForeignKey(Session, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
@@ -93,15 +98,15 @@ class TicketRequest(models.Model):
     def __unicode__(self):
         return self.url
 
-class Service(models.Model):
-    objects = ServiceManager()
 
+class ServiceURL(models.Model):
+    objects = ServiceURLManager()
+
+    service = models.ForeignKey(Service)
     scheme = models.CharField(max_length=16)
     netloc = models.CharField(max_length=255, blank=True)
     path = models.CharField(max_length=255, blank=True)
     priority = models.PositiveIntegerField(blank=True)
-    is_active = models.BooleanField()
-    is_trusted = models.BooleanField()
 
     def save(self, *args, **kwargs):
         if not self.priority:
@@ -111,13 +116,11 @@ class Service(models.Model):
             if self.path:
                 priority += 20
             self.priority = priority
-        super(Service, self).save(*args, **kwargs)
+        super(ServiceURL, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.scheme + '://' + self.netloc + self.path
 
-    def has_perm(self, perm, obj=None):
-        return (self.is_active and self.is_trusted)
 
 class ProxyGrantingTicket(AbstractTicket):
     objects = ProxyGrantingTicketManager()
@@ -127,6 +130,7 @@ class ProxyGrantingTicket(AbstractTicket):
     iou = models.CharField(max_length=255, unique=True)
     url = models.TextField()
     st = models.OneToOneField('ServiceTicket')
+
 
 @receiver(post_delete, sender=ServiceTicket)
 def st_post_delete(sender, instance, **kwargs):

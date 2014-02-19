@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'casia.assets.html5shiv',
     'casia.assets.jquery',
     'casia.assets.respondjs',
+    'casia.core',
     'casia.cas',
     'casia.webapp',
     'casia.contrib.su',

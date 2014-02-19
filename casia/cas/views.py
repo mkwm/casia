@@ -26,10 +26,12 @@ from django.utils.translation import ugettext as _
 
 from casia.cas.exceptions import Error
 from casia.cas.forms import LoginConfirmationForm
-from casia.cas.models import ProxyGrantingTicket, Service, TicketRequest
+from casia.cas.models import ProxyGrantingTicket, ServiceURL, TicketRequest
 from casia.cas.utils import (validate_ticket, issue_proxy_ticket,
                              issue_service_ticket)
+from casia.core.models import Service
 from casia.http.response import XMLResponse
+
 
 def validate(request):
     st = None
@@ -38,6 +40,7 @@ def validate(request):
     except Error:
         pass
     return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')
+
 
 def service_validate(request, require_st=True):
     response = Element('cas:serviceResponse',
@@ -65,6 +68,7 @@ def service_validate(request, require_st=True):
         auth_failure.text = ex.msg
     return XMLResponse(response)
 
+
 def login(request):
     current_site = get_current_site(request)
     context = {
@@ -77,7 +81,7 @@ def login(request):
     ticket_request.renewed = 'renew' in request.GET
     if ticket_request.url:
         try:
-            service = Service.objects.get_by_url(ticket_request.url)
+            service = ServiceURL.objects.get_by_url(ticket_request.url)
             if not service.is_active:
                 context.update({'error': _('This service is inactive')})
                 return TemplateResponse(request, 'cas/security_error.html',
@@ -90,7 +94,7 @@ def login(request):
                 ticket_request.session_id = request.session.session_key
                 ticket_request.user = request.user
             ticket_request.save()
-            target = reverse('cas_issue',
+            target = reverse('cas:issue',
                              kwargs={'ticket_request_id': ticket_request.id})
             return redirect(target)
         except Service.DoesNotExist:
@@ -99,6 +103,7 @@ def login(request):
                                     context)
     else:
         return redirect('index')
+
 
 def issue(request, ticket_request_id):
     current_site = get_current_site(request)
@@ -122,6 +127,7 @@ def issue(request, ticket_request_id):
                          kwargs={'ticket_request_id': ticket_request.id})
         return redirect_to_login(target)
 
+
 @receiver(user_logged_in)
 def ticket_request_updater(sender, request, user, **kwargs):
     target = request.GET.get(REDIRECT_FIELD_NAME)
@@ -134,8 +140,10 @@ def ticket_request_updater(sender, request, user, **kwargs):
             ticket_request.session_id = request.session.session_key
             ticket_request.save()
 
+
 def logout(request):
     return redirect('logout')
+
 
 def proxy(request):
     response = Element('cas:serviceResponse',
