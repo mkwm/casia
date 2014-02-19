@@ -15,15 +15,6 @@ from bisect import bisect_right
 from sys import maxint
 
 
-class ContextDict(object):
-    def __init__(self, obj, context):
-        self._obj = obj
-        self._context = context
-
-    def __getitem__(self, item):
-        return self._obj[item].template_context(self._context)
-
-
 class OrderedRegistry(object):
     def __init__(self):
         self.items = []

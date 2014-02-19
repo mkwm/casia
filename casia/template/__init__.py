@@ -20,7 +20,7 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 
-class _MenuItem(object):
+class MenuItem(object):
     def __init__(self, name, text, url_generator, condition, attrs):
         self.name = name
         self.text = text
@@ -44,7 +44,7 @@ class MenuRegistry(object):
         if attrs is None:
             attrs = {}
 
-        menu_item = _MenuItem(name, text, url_generator, condition, attrs)
+        menu_item = MenuItem(name, text, url_generator, condition, attrs)
         self._registry.register(menu_item, order)
 
     def register_decorator(self, text, url_generator, order=maxint, attrs=None):
@@ -74,14 +74,19 @@ class MenuRegistry(object):
         context_items = []
         for item in self._registry:
             if item.condition(request):
-                attrs_str = ' '.join(['%s="%s"' % (escape(k), escape(v))
-                    for (k, v) in item.attrs.items()])
+                attrs_str = ' '.join(['%s="%s"' % (escape(k), escape(v)) for (k, v) in item.attrs.items()])
                 attrs_str = mark_safe(attrs_str)
-                context_items.append(dict(
-                    url=item.url_generator(request),
-                    text=item.text,
-                    attrs=attrs_str))
+                context_items.append(dict(url=item.url_generator(request), text=item.text, attrs=attrs_str))
         return context_items
+
+
+class MenuRegistryDictProxy(object):
+    def __init__(self, obj, context):
+        self._obj = obj
+        self._context = context
+
+    def __getitem__(self, item):
+        return self._obj[item].template_context(self._context)
 
 
 menu = defaultdict(MenuRegistry)

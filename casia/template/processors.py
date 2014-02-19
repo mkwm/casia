@@ -11,10 +11,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-from casia.template import menu as casia_menu
-from casia.utils.datastructures import ContextDict
+from casia.template import MenuRegistryDictProxy, menu as menu_dict
 
 
 def menu(request):
-    context_menu = ContextDict(casia_menu, request)
-    return {'menu': context_menu}
+    _menu_dict = MenuRegistryDictProxy(menu_dict, request)
+    return {'menu': _menu_dict}
