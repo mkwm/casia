@@ -139,7 +139,7 @@ def ticket_request_updater(sender, request, user, **kwargs):
     target = request.GET.get(REDIRECT_FIELD_NAME)
     if target:
         target = resolve(target)
-        if target.url_name == 'cas_issue':
+        if target.view_name == 'cas:issue':
             ticket_request_id = target.kwargs.get('ticket_request_id')
             ticket_request = TicketRequest.objects.get(id=ticket_request_id)
             ticket_request.user = request.user
