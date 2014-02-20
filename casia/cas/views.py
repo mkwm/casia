@@ -50,7 +50,7 @@ def service_validate(request, require_st=True):
                        attrib={'xmlns:cas': 'http://www.yale.edu/tp/cas'})
     try:
         st = validate_ticket(request, require_st)
-        service = authenticate(st.service, request)
+        service = authenticate(service=st.service, request=request)
         if service is None:
             raise InvalidRequest('Request authentication failed.')
         auth_success = SubElement(response, 'cas:authenticationSuccess')
