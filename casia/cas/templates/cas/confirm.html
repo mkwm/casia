@@ -2,9 +2,12 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="page-header text-center">
+<div class="text-center">
   <h1>{% trans 'Confirmation' %}</h1>
-</div>
-<p class="lead text-center">{% blocktrans %}Authentication to <strong>{{ service }}</strong> requires your consent{% endblocktrans %}</p>
+  <p class="lead">{% blocktrans %}Authentication to <strong>{{ service }}</strong> requires your consent{% endblocktrans %}</p>
+  <div class="clearfix"></div>
+  <div class="col-sm-offset-4 col-sm-4">
 {% crispy form %}
+  </div>
+</div>
 {% endblock %}

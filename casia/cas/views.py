@@ -123,7 +123,7 @@ def issue(request, ticket_request_id):
             context.update({'form': form, 'service': ticket_request.service})
             return TemplateResponse(request, 'cas/confirm.html', context)
     else:
-        target = reverse('cas_issue',
+        target = reverse('cas:issue',
                          kwargs={'ticket_request_id': ticket_request.id})
         return redirect_to_login(target)
 

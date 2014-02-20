@@ -24,6 +24,5 @@ class LoginConfirmationForm(forms.Form):
         Div(
             Submit('continue', _('Continue'), css_class='btn-lg btn-success'),
             Submit('abort', _('Abort'), css_class='btn-lg btn-danger'),
-            css_class='text-center'
         ),
     )
