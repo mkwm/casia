@@ -155,11 +155,11 @@ def proxy(request):
     response = Element('cas:serviceResponse',
                        attrib={'xmlns:cas': 'http://www.yale.edu/tp/cas'})
     try:
-        proxy_success = SubElement(response, 'cas:proxySuccess')
         pt = issue_proxy_ticket(request)
         service = authenticate(service=pt.pgt.st.service, request=request)
         if service is None:
             raise InvalidRequest('Request authentication failed.')
+        proxy_success = SubElement(response, 'cas:proxySuccess')
         proxy_ticket = SubElement(proxy_success, 'cas:proxyTicket')
         proxy_ticket.text = pt.ticket
     except Error as ex:
