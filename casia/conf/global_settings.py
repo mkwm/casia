@@ -92,3 +92,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'casia.template.processors.menu',
 )
+
+CAS_SERVICE_AUTHENTICATION_BACKENDS = (
+    'casia.cas.backends.ProtocolBackend',
+    'casia.cas.backends.SharedSecretBackend',
+)

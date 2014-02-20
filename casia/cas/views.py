@@ -24,12 +24,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.utils.translation import ugettext as _
 
-from casia.cas.exceptions import Error
+from casia.cas import authenticate
+from casia.cas.exceptions import Error, InvalidRequest
 from casia.cas.forms import LoginConfirmationForm
 from casia.cas.models import ProxyGrantingTicket, ServiceURL, TicketRequest
 from casia.cas.utils import (validate_ticket, issue_proxy_ticket,
                              issue_service_ticket)
-from casia.core.models import Service
 from casia.http.response import XMLResponse
 
 
@@ -37,6 +37,9 @@ def validate(request):
     st = None
     try:
         st = validate_ticket(request)
+        service = authenticate(service=st.service, request=request)
+        if service is None:
+            raise InvalidRequest('Request authentication failed.')
     except Error:
         pass
     return HttpResponse('yes\n%s\n' % st.user if st else 'no\n\n')
@@ -47,6 +50,9 @@ def service_validate(request, require_st=True):
                        attrib={'xmlns:cas': 'http://www.yale.edu/tp/cas'})
     try:
         st = validate_ticket(request, require_st)
+        service = authenticate(st.service, request)
+        if service is None:
+            raise InvalidRequest('Request authentication failed.')
         auth_success = SubElement(response, 'cas:authenticationSuccess')
         user = SubElement(auth_success, 'cas:user')
         user.text = st.user.get_username()
@@ -151,6 +157,9 @@ def proxy(request):
     try:
         proxy_success = SubElement(response, 'cas:proxySuccess')
         pt = issue_proxy_ticket(request)
+        service = authenticate(service=pt.pgt.st.service, request=request)
+        if service is None:
+            raise InvalidRequest('Request authentication failed.')
         proxy_ticket = SubElement(proxy_success, 'cas:proxyTicket')
         proxy_ticket.text = pt.ticket
     except Error as ex:

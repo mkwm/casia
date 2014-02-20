@@ -154,3 +154,8 @@ def st_post_delete(sender, instance, **kwargs):
             logout_task.delay(instance.url, tostring(request))
         except:
             pass
+
+
+class SharedSecret(models.Model):
+    service = models.OneToOneField(Service, primary_key=True, related_name='cas_shared_secret')
+    secret = models.CharField(max_length=255)

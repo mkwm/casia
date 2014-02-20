@@ -14,7 +14,7 @@
 from django.contrib import admin
 
 from casia.cas.models import (ProxyGrantingTicket, ServiceURL, ServiceTicket,
-                              TicketRequest)
+                              TicketRequest, SharedSecret)
 
 
 class ProxyGrantingTicketAdmin(admin.ModelAdmin):
@@ -37,3 +37,4 @@ admin.site.register(ProxyGrantingTicket, ProxyGrantingTicketAdmin)
 admin.site.register(ServiceURL, ServiceURLAdmin)
 admin.site.register(ServiceTicket, ServiceTicketAdmin)
 admin.site.register(TicketRequest, TicketRequestAdmin)
+admin.site.register(SharedSecret)
