@@ -11,7 +11,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
-import requests
 from urlparse import urlparse
 from uuid import uuid4
 from xml.etree.ElementTree import Element, SubElement, tostring
@@ -22,13 +21,12 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch.dispatcher import receiver
 from django.utils.timezone import now
-from django_extensions.db.fields import UUIDField
 
 from casia.cas.managers import (ConsumableManager, ProxyGrantingTicketManager,
                                 ServiceTicketManager, ServiceURLManager)
 from casia.cas.tasks import logout as logout_task
 from casia.cas.utils import generate_ticket
-from casia.core.models import Service
+from casia.core.models import Service, LoginHistoryEntry
 
 
 class AbstractTicket(models.Model):
@@ -85,18 +83,6 @@ class ServiceTicket(AbstractTicket, AbstractConsumable):
         else:
             self.prefix = 'PT'
         super(ServiceTicket, self).save(*args, **kwargs)
-
-
-class TicketRequest(models.Model):
-    id = UUIDField(auto=True, primary_key=True)
-    url = models.TextField()
-    service = models.ForeignKey(Service)
-    renewed = models.BooleanField()
-    session = models.ForeignKey(Session, blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
-
-    def __unicode__(self):
-        return self.url
 
 
 class ServiceURL(models.Model):
@@ -159,3 +145,8 @@ def st_post_delete(sender, instance, **kwargs):
 class SharedSecret(models.Model):
     service = models.OneToOneField(Service, primary_key=True, related_name='cas_shared_secret')
     secret = models.CharField(max_length=255)
+
+
+class CASLoginHistoryEntry(LoginHistoryEntry):
+    renewed = models.BooleanField(default=False)
+    used_at = models.DateTimeField(blank=True, null=True)

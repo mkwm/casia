@@ -46,18 +46,13 @@ def update_url(url, url_vars):
     return urlunparse(url_parts)
 
 
-def issue_service_ticket(ticket_request):
+def issue_service_ticket(user, session, url, service, renewed=False):
     from casia.cas.models import ServiceTicket
 
-    st = ServiceTicket(user=ticket_request.user,
-                       session=ticket_request.session,
-                       url=ticket_request.url,
-                       service=ticket_request.service,
-                       renewed=ticket_request.renewed)
+    st = ServiceTicket(user=user, session_id=session.session_key, url=url, service=service, renewed=renewed)
     st.save()
 
-    target = update_url(ticket_request.url, {'ticket': st.ticket})
-    ticket_request.delete()
+    target = update_url(url, {'ticket': st.ticket})
 
     return HttpResponseRedirect(target)
 

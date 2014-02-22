@@ -11,6 +11,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.manager import EmptyManager
@@ -157,3 +158,9 @@ class UnknownService(object):
 
     def is_authenticated(self):
         return False
+
+
+class LoginHistoryEntry(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    service = models.ForeignKey('Service', related_name='+')
+    login_time = models.DateTimeField(auto_now=True)
