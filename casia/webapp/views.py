@@ -18,7 +18,6 @@ from django.contrib.auth.views import (
     password_change as django_password_change,
     password_change_done as django_password_change_done
 )
-from django.contrib.sites.models import get_current_site
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -27,26 +26,22 @@ from django.utils.translation import ugettext as _
 
 from casia.auth.forms import AuthenticationForm, ReauthenticationFormWrapper
 
+
 @login_required
 def index(request):
-    context = {
-        'title': _('Logged in')
-    }
+    context = {'title': _('Logged in')}
     return TemplateResponse(request, 'webapp/index.html', context)
+
 
 def login(request):
     if not request.user.is_authenticated():
         template_name = 'webapp/login.html'
         form = AuthenticationForm
-        context = {
-            'title': _('Log in')
-        }
+        context = {'title': _('Log in')}
     else:
         template_name = 'webapp/relogin.html'
         form = ReauthenticationFormWrapper(user=request.user)
-        context = {
-            'title': _('Log in again')
-        }
+        context = {'title': _('Log in again')}
     return django_login(request, template_name, authentication_form=form,
                         extra_context=context)
 
@@ -57,11 +52,10 @@ def logout(request):
         messages.error(request, _('You were not logged in'))
     return django_logout_then_login(request)
 
+
 @login_required
 def password_change(request):
-    context = {
-        'title': _('Password change')
-    }
+    context = {'title': _('Password change')}
     backend_path = request.session[BACKEND_SESSION_KEY]
     backend = load_backend(backend_path)
     if hasattr(backend, 'password_change_form'):
@@ -74,10 +68,9 @@ def password_change(request):
         password_change_form=password_change_form,
         post_change_redirect=post_change_redirect)
 
+
 @login_required
 def password_change_done(request):
-    context = {
-        'title': _('Password changed')
-    }
+    context = {'title': _('Password changed')}
     return django_password_change_done(request,
         template_name='webapp/password_change_done.html', extra_context=context)

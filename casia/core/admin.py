@@ -15,5 +15,6 @@ from django.contrib import admin
 
 from casia.core.models import Service, ServicePermission
 
+
 admin.site.register(Service)
 admin.site.register(ServicePermission)

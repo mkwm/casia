@@ -80,9 +80,7 @@ def service_validate(request, require_st=True):
 
 
 def login(request):
-    context = {
-        'title': 'Authentication'
-    }
+    context = {'title': 'Authentication'}
     url = request.GET.get('service')
     if url:
         try:
@@ -113,9 +111,7 @@ def login(request):
 
 @login_required
 def issue(request):
-    context = {
-        'title': _('Confirmation')
-    }
+    context = {'title': _('Confirmation')}
     url = request.GET.get('service')
     try:
         service = ServiceURL.objects.get_by_url(url)

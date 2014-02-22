@@ -95,19 +95,14 @@ def issue_proxy_ticket(request):
 
     url = request.GET.get('targetService')
     pgt = ProxyGrantingTicket.objects.get_by_request(request)
-    service = None
 
     try:
         service = ServiceURL.objects.get_by_url(url)
     except ServiceURL.DoesNotExist:
         raise InvalidService("Service '%s' is unknown." % url)
 
-    pt = ServiceTicket(user=pgt.st.user,
-                       session=pgt.st.session,
-                       url=url,
-                       service=service,
-                       renewed=False,
-                       pgt=pgt)
+    pt = ServiceTicket(user=pgt.st.user, session=pgt.st.session, url=url,
+                       service=service, renewed=False, pgt=pgt)
     pt.save()
 
     return pt

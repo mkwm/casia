@@ -19,6 +19,7 @@ from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit
 
+
 class AuthenticationForm(DjangoAuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(AuthenticationForm, self).__init__(*args, **kwargs)
@@ -32,6 +33,7 @@ class AuthenticationForm(DjangoAuthenticationForm):
                           placeholder=self.fields['password'].label),
             Submit('log-in', _('Log in'), css_class='btn-lg btn-block'),
         )
+
 
 class PasswordChangeForm(DjangoPasswordChangeForm):
     def __init__(self, *args, **kwargs):
@@ -51,6 +53,7 @@ class PasswordChangeForm(DjangoPasswordChangeForm):
             ),
         )
 
+
 class ReauthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         if ('data' in kwargs and
@@ -62,6 +65,7 @@ class ReauthenticationForm(AuthenticationForm):
 
     def clean_username(self):
         return self.initial['username']
+
 
 class ReauthenticationFormWrapper(object):
     def __init__(self, user):

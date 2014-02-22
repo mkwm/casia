@@ -25,9 +25,7 @@ def get_user(request, user_id, backend_path):
 
 @permission_required('auth.switch_user', raise_exception=True)
 def su(request):
-    context = {
-        'title': 'Switch user'
-    }
+    context = {'title': 'Switch user'}
 
     if request.method == 'POST':
         form = SwitchUserForm(data=request.POST)
