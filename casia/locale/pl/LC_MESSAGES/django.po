@@ -1,36 +1,33 @@
 # This file is part of Casia - CAS server based on Django
 # Copyright (C) 2013 Mateusz Małek
-
 # Casia is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
-
 msgid ""
 msgstr ""
 "Project-Id-Version: Casia\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-06 13:40+0200\n"
+"POT-Creation-Date: 2014-02-22 22:39+0000\n"
 "PO-Revision-Date: 2013-10-06 13:50+0100\n"
 "Last-Translator: Mateusz Małek <translator@mkwm.eu.org>\n"
 "Language-Team: Mateusz Małek <translator@mkwm.eu.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 1.5.5\n"
-"Language: pl\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: auth/forms.py:30 webapp/views.py:43 webapp/templates/webapp/base.html:45
+#: auth/forms.py:34 webapp/views.py:40 webapp/templates/webapp/base.html:28
 msgid "Log in"
 msgstr "Zaloguj się"
 
-#: auth/forms.py:45 webapp/templates/webapp/base.html:38
+#: auth/forms.py:51 core/__init__.py:21
 msgid "Change password"
 msgstr "Zmień hasło"
 
@@ -42,19 +39,19 @@ msgstr "Kontynuuj"
 msgid "Abort"
 msgstr "Przerwij"
 
-#: cas/views.py:82
+#: cas/views.py:89
 msgid "This service is inactive"
 msgstr "Ta usługa jest nieaktywna"
 
-#: cas/views.py:97
+#: cas/views.py:105
 msgid "This service is unknown"
 msgstr "Ta usługa jest nieznana"
 
-#: cas/views.py:108 cas/templates/cas/confirm.html:6
+#: cas/views.py:114 cas/templates/cas/confirm.html:6
 msgid "Confirmation"
 msgstr "Potwierdzenie"
 
-#: cas/templates/cas/confirm.html:8
+#: cas/templates/cas/confirm.html:7
 #, python-format
 msgid "Authentication to <strong>%(service)s</strong> requires your consent"
 msgstr "Uwierzytelnienie do <strong>%(service)s</strong> wymaga twojej zgody"
@@ -68,37 +65,50 @@ msgid "Authentication to the service was aborted due to security reasons"
 msgstr ""
 "Uwierzytelnianie do usługi zostało przerwane ze względów bezpieczeństwa"
 
-#: webapp/views.py:34 webapp/templates/webapp/index.html:5
+#: contrib/su/templates/webapp/su.html:7
+msgid "Switch to other user account"
+msgstr "Przełącz na konto innego użytkownika"
+
+#: contrib/su/templates/webapp/su.html:8
+msgid ""
+"To begin working in different user account context, enter their username and "
+"choose authentication backend that switched session should be tied with"
+msgstr ""
+"Aby rozpocząć pracę na koncie innego użytkownika, wprowadź jego nazwę oraz "
+"wybierz metodę uwierzytelniania z którą powinna zostać powiązana przełączona "
+"sesja"
+
+#: core/__init__.py:23
+msgid "Admin site"
+msgstr "Panel administracyjny"
+
+#: core/__init__.py:24
+msgid "Log out"
+msgstr "Wyloguj się"
+
+#: webapp/views.py:32 webapp/templates/webapp/index.html:5
 msgid "Logged in"
 msgstr "Zalogowany"
 
-#: webapp/views.py:49 webapp/templates/webapp/relogin.html:5
+#: webapp/views.py:44
 msgid "Log in again"
 msgstr "Zaloguj się ponownie"
 
-#: webapp/views.py:56
+#: webapp/views.py:50
 msgid "You have been logged out successfully"
 msgstr "Zostałeś pomyślnie wylogowany"
 
-#: webapp/views.py:58
+#: webapp/views.py:52
 msgid "You were not logged in"
 msgstr "Nie byłeś zalogowany"
 
-#: webapp/views.py:67 webapp/templates/webapp/password_change.html:6
+#: webapp/views.py:58 webapp/templates/webapp/password_change.html:6
 msgid "Password change"
 msgstr "Zmiana hasła"
 
-#: webapp/views.py:80 webapp/templates/webapp/password_change_done.html:5
+#: webapp/views.py:74 webapp/templates/webapp/password_change_done.html:5
 msgid "Password changed"
 msgstr "Hasło zmienione"
-
-#: webapp/templates/webapp/base.html:36
-msgid "Manage site"
-msgstr "Zarządzaj serwisem"
-
-#: webapp/templates/webapp/base.html:39
-msgid "Log out"
-msgstr "Wyloguj się"
 
 #: webapp/templates/webapp/index.html:7
 #, python-format
@@ -109,14 +119,15 @@ msgstr "Jesteś zalogowany do %(site_name)s"
 msgid "Authentication to the services would be performed automatically"
 msgstr "Uwierzytelnianie do usług będzie wykonywane automatycznie"
 
-#: webapp/templates/webapp/login.html:6
-msgid "Central authentication"
-msgstr "Centralne uwierzytelnianie"
+#: webapp/templates/webapp/login.html:7
+#, python-format
+msgid "Log in to your account at %(site_name)s"
+msgstr "Zaloguj się na swoje konto w %(site_name)s"
 
 #: webapp/templates/webapp/password_change_done.html:7
 msgid "Your password has been changed"
 msgstr "Twoje hasło zostało zmienione"
 
-#: webapp/templates/webapp/relogin.html:6
+#: webapp/templates/webapp/relogin.html:7
 msgid "Confirm your credentials for security sake"
 msgstr "Potwierdź swoje poświadczenia ze względów bezpieczeństwa"
