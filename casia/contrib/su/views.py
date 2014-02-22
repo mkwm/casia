@@ -25,10 +25,7 @@ def get_user(request, user_id, backend_path):
 
 @permission_required('auth.switch_user', raise_exception=True)
 def su(request):
-    current_site = get_current_site(request)
     context = {
-        'site': current_site,
-        'site_name': current_site.name,
         'title': 'Switch user'
     }
 

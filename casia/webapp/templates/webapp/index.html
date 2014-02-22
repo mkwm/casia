@@ -4,6 +4,6 @@
 <div class="page-header">
   <h1>{% trans 'Logged in' %}</h1>
 </div>
-<p class="lead">{% blocktrans %}You are logged into {{ site_name }}{% endblocktrans %}</p>
+<p class="lead">{% blocktrans with site.name as site_name %}You are logged into {{ site_name }}{% endblocktrans %}</p>
 <p>{% trans 'Authentication to the services would be performed automatically' %}</p>
 {% endblock %}

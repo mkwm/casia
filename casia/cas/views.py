@@ -80,10 +80,7 @@ def service_validate(request, require_st=True):
 
 
 def login(request):
-    current_site = get_current_site(request)
     context = {
-        'site': current_site,
-        'site_name': current_site.name,
         'title': 'Authentication'
     }
     url = request.GET.get('service')
@@ -116,10 +113,7 @@ def login(request):
 
 @login_required
 def issue(request):
-    current_site = get_current_site(request)
     context = {
-        'site': current_site,
-        'site_name': current_site.name,
         'title': _('Confirmation')
     }
     url = request.GET.get('service')

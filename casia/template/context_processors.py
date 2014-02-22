@@ -11,7 +11,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Casia. If not, see <http://www.gnu.org/licenses/>.
 
+from django.contrib.sites.models import get_current_site
+
 from casia.template import MenuRegistryDictProxy, menu as menu_dict
+
+
+def site(request):
+    return {'site': get_current_site(request)}
 
 
 def menu(request):

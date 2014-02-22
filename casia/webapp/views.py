@@ -29,10 +29,7 @@ from casia.auth.forms import AuthenticationForm, ReauthenticationFormWrapper
 
 @login_required
 def index(request):
-    current_site = get_current_site(request)
     context = {
-        'site': current_site,
-        'site_name': current_site.name,
         'title': _('Logged in')
     }
     return TemplateResponse(request, 'webapp/index.html', context)
@@ -62,10 +59,7 @@ def logout(request):
 
 @login_required
 def password_change(request):
-    current_site = get_current_site(request)
     context = {
-        'site': current_site,
-        'site_name': current_site.name,
         'title': _('Password change')
     }
     backend_path = request.session[BACKEND_SESSION_KEY]
@@ -82,10 +76,7 @@ def password_change(request):
 
 @login_required
 def password_change_done(request):
-    current_site = get_current_site(request)
     context = {
-        'site': current_site,
-        'site_name': current_site.name,
         'title': _('Password changed')
     }
     return django_password_change_done(request,

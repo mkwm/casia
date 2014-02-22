@@ -90,7 +90,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
-    'casia.template.processors.menu',
+    'casia.template.context_processors.site',
+    'casia.template.context_processors.menu',
 )
 
 CAS_SERVICE_AUTHENTICATION_BACKENDS = (
