@@ -150,3 +150,7 @@ class SharedSecret(models.Model):
 class CASLoginHistoryEntry(LoginHistoryEntry):
     renewed = models.BooleanField(default=False)
     used_at = models.DateTimeField(blank=True, null=True)
+
+    def use(self):
+        self.used_at = now()
+        self.save()

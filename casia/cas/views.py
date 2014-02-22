@@ -125,13 +125,12 @@ def issue(request):
     url = request.GET.get('service')
     try:
         service = ServiceURL.objects.get_by_url(url)
-        x = CASLoginHistoryEntry.objects.filter(user_id=request.user.id,
-                                                service=service,
-                                                used_at__isnull=True).latest('login_time')
+        entry = CASLoginHistoryEntry.objects.filter(user=request.user,
+                                                    service=service,
+                                                    used_at=None).latest('login_time')
         if service.is_trusted or 'continue' in request.POST:
-            x.used_at = now()
-            x.save()
-            return issue_service_ticket(request.user, request.session, url, service, x.renewed)
+            entry.use()
+            return issue_service_ticket(request.user, request.session, url, service, entry.renewed)
         elif 'abort' in request.POST:
             return redirect('index')
         else:
